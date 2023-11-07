@@ -22,11 +22,10 @@ namespace MyGame
             m_LPlayers = new List<Player>();
             m_MapHandeler.SetMap(map.IntedMap, map.GridLayout);
         }
-        int rr = 0;
         public void Draw()
         {
             UtilsStatic.NewPush();
-            UtilsStatic.PushTranslate(200, 200);
+            UtilsStatic.PushTranslate(-m_Player.GetRect().X + UtilsStatic.ScreenSize.Width/2, -m_Player.GetRect().Y + UtilsStatic.ScreenSize.Height / 2);
             m_MapHandeler.DrawMap();
             m_Player.Draw();
             //for (int i = m_LPlayers.Count -1; i >= 0; i--)
@@ -46,11 +45,11 @@ namespace MyGame
                 }
                 m_LPlayers[i].Draw();
             }
+            UtilsStatic.ResetColor();
             UtilsStatic.PopMatrix();
         }
         public void Update(float elapsedSec)
         {
-            rr++;
             CheckKeyboardInput(elapsedSec);
 
             m_MapHandeler.Update(elapsedSec);
@@ -73,10 +72,10 @@ namespace MyGame
             else return;
             KeyboardState keyboardState = Keyboard.GetState();
             m_PlayerManger.KeyEvents(keyboardState);
-            if (keyboardState.IsKeyDown(Keys.Left))
+            if (keyboardState.IsKeyDown(Keys.Space))
             {
                 t+= 2*elapsedSec;
-               // m_LPlayers.Add(new Player());
+               m_LPlayers.Add(new Player(m_Player.GetRect()));
             }
             /*
             KeyboardState keyboardState = Keyboard.GetState();

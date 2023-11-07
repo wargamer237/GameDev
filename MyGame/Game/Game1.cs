@@ -25,10 +25,11 @@ namespace MyGame
             base.Initialize();
             Window.Title = "TestZone";
             m_Main = new Main();
-            m_Main.Initialize();
+
             UtilsStatic.SetScreen(m_Intelize, m_Graph);
             //conecting screen with drawing functions
             UtilsStatic.SetScreenSize(1200, 800);
+            m_Main.Initialize();
         }
 
         protected override void LoadContent()

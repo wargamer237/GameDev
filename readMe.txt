@@ -8,3 +8,6 @@ see at DrawClass.cs from line 8 function name: "public static Texture2D GetTextu
 ------------Updates------------
 -------------------------------
 1)06/11	Start up git up (project has already colison, map gerator, and some textures)
+2)06/11 Fixed the creating of a chunk where you move a chunk by y it woud shift 1 back from its row. 
+
+

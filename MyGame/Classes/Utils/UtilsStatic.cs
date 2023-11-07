@@ -91,7 +91,7 @@ namespace MyUtils//DrawingClasses
         //CONSTRUTORS 
         static UtilsStatic()
         {
-            m_ResetColor = Color.WhiteSmoke;
+            m_ResetColor = Color.White;
             m_ListTextures = new List<Texture2D>();
             m_ListTexturePaths = new List<string>();
             m_ScreenOnlyDraw = false;
@@ -299,19 +299,19 @@ namespace MyUtils//DrawingClasses
             DrawClass.DrawRect(rect, m_Color, m_Graph, texture);
             StopDraw();
         }
-        private static void Draw(RectangleF rect, string path, Rectangle sourceRect)
+        private static void Draw(RectangleF rect, string path, Rectangle sourceRect, SpriteEffects flipDirection )
         {
             SetTotaalSRTVector();
             //if (!IsInScreen(rect)) return;
             Texture2D texture = m_ColorTexture;
-            if (string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(path))
             {
                 SetTexture(path);
                 texture = m_CurantTexture;
             }
 
             StartDraw();
-            DrawClass.DrawRect(rect, m_Color, m_Graph, texture, sourceRect);
+            DrawClass.DrawRect(rect, m_Color, m_Graph, texture, sourceRect, flipDirection);
             StopDraw();
         }
         //DRAW RECTANGLE WITH COLOR
@@ -326,9 +326,9 @@ namespace MyUtils//DrawingClasses
         {
             Draw(rect, path);
         }
-        public static void DrawTexture(RectangleF rect, string path, Rectangle sourceRect)
+        public static void DrawTexture(RectangleF rect, Rectangle sourceRect, string path, SpriteEffects flipDirection = SpriteEffects.None)
         {
-            Draw(rect, path, sourceRect);
+            Draw(rect, path, sourceRect, flipDirection);
         }
         //This function sets the current texture to the given path if it has not been loaded yet.
         private static void SetTexture(string path)

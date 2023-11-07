@@ -58,7 +58,7 @@ namespace Blocks
             
             UtilsStatic.SetColor(m_Color);
             UtilsStatic.DrawTexture(new RectangleF(0, 0, m_Rect.Width, m_Rect.Height), m_TexturePath);
-            
+            UtilsStatic.ResetColor();
             UtilsStatic.PushTranslate(-m_Rect.X, -m_Rect.Y);//coment OR THIS 
             //UtilsStatic.PopMatrix();
         }
