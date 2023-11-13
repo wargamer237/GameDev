@@ -2,9 +2,7 @@
 using MyUtils;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace MyPlayer
 {
@@ -26,6 +24,7 @@ namespace MyPlayer
         PointF m_StartPosition;
         Vector2 m_Velocity;
         Vector2 m_Direction;
+        bool m_LookRight;
         //speed
         float m_Speed;
         float m_MaxSpeed;
@@ -33,6 +32,11 @@ namespace MyPlayer
         float m_Gravity;
         //texture
         string m_TexturePath;
+        //jump
+        bool m_Jump;
+        bool m_IsJumping;
+        float m_JumpMultiplier;
+
 
         //COLISONS VARS
         RectangleF m_ColisionRect;
@@ -43,7 +47,7 @@ namespace MyPlayer
         AnimationHandeler m_AnimationHandeler;
         RectangleF m_DrawRect;
         Rectangle m_SourceRect;//rect of cuting out texture for animations
-      
+
         //CONSTRUCTOR
         public Player(RectangleF playerRect)
         {
@@ -62,19 +66,22 @@ namespace MyPlayer
         {
             m_TexturePath = "Textures/Player/PlayerSheet3.png";
             VerticxDebugRects = new List<RectangleF>();
-            m_Speed = 1200;
-            m_Resistents = m_Speed / 100 * 30;
-            m_MaxSpeed = m_Speed*2;
+            m_Speed = 400;
+            m_Resistents = m_Speed / 100 * 50;
+            m_MaxSpeed = m_Speed * 1f;
             m_Gravity = 900;
             // down right test
             m_StartPosition = new PointF(200, -300);
             m_DrawRect.X = m_StartPosition.X;
             m_DrawRect.Y = m_StartPosition.Y;
 
-            m_DrawRect.Width = 300;
-            m_DrawRect.Height = 300;
+            m_DrawRect.Width = 100;
+            m_DrawRect.Height = 100;
             SetColisonRect(m_DrawRect);
-
+            m_LookRight = true;
+            m_Jump = false;
+            m_IsJumping = false;
+            m_JumpMultiplier = 0;
             SetAnimationTextures(13, 15);
         }
         private List<Vertexs> IntelizeVertexs()
@@ -170,25 +177,25 @@ namespace MyPlayer
                 new RectangleF(v8.First.X, v8.First.Y, v8.Second.X - v8.First.X + with, v8.Second.Y - v8.First.Y));
 
             return vertexsList;
-        }       
+        }
         //DRAWS
         public void Draw()
         {
             SpriteEffects directions = SpriteEffects.None;
-            if (m_Velocity.X < 0)
+            if (!m_LookRight)
                 directions = SpriteEffects.FlipHorizontally;
             UtilsStatic.NewPush();
-            UtilsStatic.PushTranslate(m_DrawRect.X - m_DrawRect.Width/2, m_DrawRect.Y - m_DrawRect.Height/2);
+            UtilsStatic.PushTranslate(m_DrawRect.X - m_DrawRect.Width / 2, m_DrawRect.Y - m_DrawRect.Height / 2);
             /*DEBUG /
             tilsStatic.SetColor(Color.Red);
             UtilsStatic.DrawRect(new RectangleF(m_DrawRect.Width / 2, m_DrawRect.Height / 2, m_DrawRect.Width, m_DrawRect.Height));          
             UtilsStatic.SetColor(Color.Black);
             / */
-            UtilsStatic.DrawTexture(new RectangleF(m_DrawRect.Width/2, m_DrawRect.Height/2, m_DrawRect.Width, m_DrawRect.Height)
+            UtilsStatic.DrawTexture(new RectangleF(m_DrawRect.Width / 2, m_DrawRect.Height / 2, m_DrawRect.Width, m_DrawRect.Height)
                 , m_SourceRect, m_TexturePath, directions);
-           
+
             UtilsStatic.PopMatrix();
-            
+
             //DEBUG VERTIX
             foreach (RectangleF item in VerticxDebugRects)
             {
@@ -197,7 +204,8 @@ namespace MyPlayer
                 UtilsStatic.ResetColor();
             }
         }
-        public float SpeedLimit(float velocity, float limit)
+        //Macanics
+        private float SpeedLimit(float velocity, float limit)
         {
             if (velocity > limit)
             {
@@ -209,44 +217,80 @@ namespace MyPlayer
             }
             return velocity;
         }
-        public float ResitenceCalc(float velocity, float elapsedSec)
+        private float ResitenceCalc(float velocity, float elapsedSec)
         {
-            if (m_Direction.X != 0) return velocity;
-            if (velocity == 0) return velocity;
+            float speed = m_Speed;
+            if (!(m_Velocity.X > 0 && m_Direction.X < 0) && !(m_Velocity.X < 0 && m_Direction.X > 0))
+            {
+                if (m_Direction.X != 0) return velocity;
+                if (velocity == 0) return velocity;
+            }
+            else
+            {
+                speed *= 2;
+            }
 
             float absX = Math.Abs(velocity);
 
             if (absX < m_Resistents) return 0;
-
+            
             if (velocity > 0)
             {
-                velocity += -m_Speed * elapsedSec;
+                velocity += -speed * elapsedSec;
             }
             else if (velocity < 0)
             {
-                velocity += m_Speed * elapsedSec;
+                velocity += speed * elapsedSec;
             }
 
             return velocity;
+        }
+        private void Jump(float elapsedSec)
+        {
+            //IF ON GROUND GO BACK 
+            if ((m_Velocity.Y == 0 && m_Direction.Y >= 0)||(m_Direction.Y >= 0 && m_Jump))
+            {
+                //IF JUMP WAS NOT USABLE MAKE IT USABLE
+                if (!m_Jump)
+                {
+                    m_Jump = true;
+                }
+                return;
+            }
+            //IF TRY TO JUMP AND JUMP IS TRUE START JUMP
+            if (m_Jump == true)
+            {
+                m_IsJumping = true;
+                m_JumpMultiplier = m_Direction.Y;
+            }
+            //
+            //PLAYER IS FALLING DOWN, FALLING DOWN, FALLING DOWN
+            //PLAYER IS FALLING DOWN MY PORE READER
+            if (!m_Jump) return;
+            //GO UP, JUMP
+            m_Velocity.Y = m_JumpMultiplier * (m_Gravity * 20)*2 * elapsedSec;
+            m_Jump = false;
         }
         //UPDATES
         public void Update(float elapsedSec)
         {
             TextureUpdate(elapsedSec, 0.25f);
             //Slow down player when stops moving Horzontal X
-            if(m_Velocity.Y == 0)
-            m_Velocity.X = ResitenceCalc(m_Velocity.X, elapsedSec);
+            if (m_Velocity.Y == 0)
+                m_Velocity.X = ResitenceCalc(m_Velocity.X, elapsedSec);
             //SPEED LIMIT
-            m_Velocity.X = SpeedLimit(m_Velocity.X, m_MaxSpeed);
-            m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_MaxSpeed);
-            //if up timer jump for 2s or so do no you see
+            Jump(elapsedSec);
             m_Velocity.Y += m_Gravity * elapsedSec;
             m_Velocity.X += m_Direction.X * m_Speed * elapsedSec;
-            m_Velocity.Y += m_Direction.Y * (m_Speed + m_Gravity) * elapsedSec;
+            m_Velocity.X = SpeedLimit(m_Velocity.X, m_MaxSpeed);
+            m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_Gravity);
+
+            //if (!m_IsJumping)
+
             UpdateColision(ref m_DrawRect);
             m_DrawRect.X += m_Velocity.X * elapsedSec;
             m_DrawRect.Y += m_Velocity.Y * elapsedSec;
- 
+
             SetColisonRect(m_DrawRect);
         }
         private void TextureUpdate(float elapsedSec, float animationDuration)
@@ -258,7 +302,7 @@ namespace MyPlayer
             m_SourceRect.Width -= m_SourceRect.Width / 100 * 10;
             m_SourceRect.Height -= m_SourceRect.Height / 100 * 20;
             m_SourceRect.Y += m_SourceRect.Height / 100 * 20;
-        } 
+        }
         /// <summary>
         /// Its working!!. it check colison of the vertics and 
         /// if it hit somthing and the directions of the velocty is the same 
@@ -266,7 +310,7 @@ namespace MyPlayer
         /// if you change direction it will check that sinde IF THERE IS COLISION
         /// (ps: all vertics are always checking for colison: see maphandeler)
         /// </summary>
-        private void UpdateColision(ref RectangleF rect) 
+        private void UpdateColision(ref RectangleF rect)
         {
             float horizontalDepth = 0;
             float verticalDepth = 0;
@@ -363,10 +407,10 @@ namespace MyPlayer
                     // Code for attack three
                     break;
                 case CurantMovment.Jump:
-                    m_AnimationHandeler.SetAnimation((int)CurantMovment.Jump, 0, 2, 4);
+                    m_AnimationHandeler.SetAnimation((int)CurantMovment.Jump, 1, 2, 4);
                     break;
                 case CurantMovment.Fall:
-                    m_AnimationHandeler.SetAnimation((int)CurantMovment.Fall, 0, 1, 3);
+                    m_AnimationHandeler.SetAnimation((int)CurantMovment.Fall, 0, 1, 4);
                     break;
                 default:
                     // Code to handle an undefined movement
@@ -376,7 +420,7 @@ namespace MyPlayer
         }
         private void SetColisonRect(RectangleF drawRect)
         {
-            float marginH = drawRect.Height/100 * 5;
+            float marginH = drawRect.Height / 100 * 5;
             float width = drawRect.Width / 1.9f;
             float height = drawRect.Height / 1.3f;
 
