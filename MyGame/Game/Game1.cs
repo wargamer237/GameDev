@@ -28,7 +28,7 @@ namespace MyGame
 
             UtilsStatic.SetScreen(m_Intelize, m_Graph);
             //conecting screen with drawing functions
-            UtilsStatic.SetScreenSize(1200, 800);
+            UtilsStatic.SetScreenSize(1800, 900);
             m_Main.Initialize();
         }
 

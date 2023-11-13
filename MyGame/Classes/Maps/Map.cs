@@ -45,12 +45,12 @@ namespace MyMap
             gridLayout.YChunck = 5;
             gridLayout.XBlock = 5;
             gridLayout.YBlock = 5;
-            gridLayout.BlockSize = 300;
+            gridLayout.BlockSize = 200;
             m_GridLayout = gridLayout;
             m_IntedMap = InitializeMap(gridLayout);
             int[][] chunck1 = {
-                new int[] { 0, 0, 1, 1, 1 },
-                new int[] { 0, 0, 0, 1, 1 },
+                new int[] { 1, 1, 1, 1, 1 },
+                new int[] { 1, 0, 0, 1, 1 },
                 new int[] { 1, 0, 3, 3, 1 },
                 new int[] { 1, 0, 1, 1, 1 },
                 new int[] { 1, 1, 1, 0, 0 }

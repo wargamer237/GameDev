@@ -2,28 +2,49 @@
 using MyUtils;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace MyPlayer
 {
     internal class Player : HasAnimations
     {
+        //ENUMS 
+        //ACTION ENUM
+        enum CurantMovment
+        {
+            Idel = 0,
+            Run = 1,
+            AtackOne = 2,
+            AtackTwo = 3,
+            AtackThree = 4,
+            Jump = 5,
+            Fall = 6
+        }
+        //STANDARS
         PointF m_StartPosition;
         Vector2 m_Velocity;
         Vector2 m_Direction;
-
+        //speed
         float m_Speed;
+        float m_MaxSpeed;
+        float m_Resistents;
         float m_Gravity;
-
+        //texture
         string m_TexturePath;
-        AnimationHandeler m_AnimationHandeler;
 
+        //COLISONS VARS
         RectangleF m_ColisionRect;
-        RectangleF m_DrawRect;
-        Rectangle m_SourceRect;//rect of cuting out texture for animations
-
         List<Vertexs> m_Vertexs;
         List<RectangleF> VerticxDebugRects;
+
+        //ANIMATIONS VARS
+        AnimationHandeler m_AnimationHandeler;
+        RectangleF m_DrawRect;
+        Rectangle m_SourceRect;//rect of cuting out texture for animations
+      
+        //CONSTRUCTOR
         public Player(RectangleF playerRect)
         {
             Intelize();
@@ -36,12 +57,15 @@ namespace MyPlayer
             Intelize();
             SetVertexs(IntelizeVertexs());
         }
+        //INTELIZE
         private void Intelize()
         {
             m_TexturePath = "Textures/Player/PlayerSheet3.png";
             VerticxDebugRects = new List<RectangleF>();
             m_Speed = 1200;
-            m_Gravity = 200;
+            m_Resistents = m_Speed / 100 * 30;
+            m_MaxSpeed = m_Speed*2;
+            m_Gravity = 900;
             // down right test
             m_StartPosition = new PointF(200, -300);
             m_DrawRect.X = m_StartPosition.X;
@@ -146,20 +170,8 @@ namespace MyPlayer
                 new RectangleF(v8.First.X, v8.First.Y, v8.Second.X - v8.First.X + with, v8.Second.Y - v8.First.Y));
 
             return vertexsList;
-        }
-        //jump, sprint, esc
-        enum CurantMovment
-        {
-            Idel = 0,
-            Run = 1,
-            AtackOne = 2,
-            AtackTwo = 3,
-            AtackThree = 4,
-            Jump = 5,
-            Fall = 6
-        }
-       
-        //DRAW
+        }       
+        //DRAWS
         public void Draw()
         {
             SpriteEffects directions = SpriteEffects.None;
@@ -167,9 +179,11 @@ namespace MyPlayer
                 directions = SpriteEffects.FlipHorizontally;
             UtilsStatic.NewPush();
             UtilsStatic.PushTranslate(m_DrawRect.X - m_DrawRect.Width/2, m_DrawRect.Y - m_DrawRect.Height/2);
-            /**/UtilsStatic.SetColor(Color.Red);
+            /*DEBUG /
+            tilsStatic.SetColor(Color.Red);
             UtilsStatic.DrawRect(new RectangleF(m_DrawRect.Width / 2, m_DrawRect.Height / 2, m_DrawRect.Width, m_DrawRect.Height));          
-            UtilsStatic.SetColor(Color.Black);//*/
+            UtilsStatic.SetColor(Color.Black);
+            / */
             UtilsStatic.DrawTexture(new RectangleF(m_DrawRect.Width/2, m_DrawRect.Height/2, m_DrawRect.Width, m_DrawRect.Height)
                 , m_SourceRect, m_TexturePath, directions);
            
@@ -183,10 +197,48 @@ namespace MyPlayer
                 UtilsStatic.ResetColor();
             }
         }
-        //UPDATE
+        public float SpeedLimit(float velocity, float limit)
+        {
+            if (velocity > limit)
+            {
+                velocity = limit;
+            }
+            else if (velocity < -limit)
+            {
+                velocity = -limit;
+            }
+            return velocity;
+        }
+        public float ResitenceCalc(float velocity, float elapsedSec)
+        {
+            if (m_Direction.X != 0) return velocity;
+            if (velocity == 0) return velocity;
+
+            float absX = Math.Abs(velocity);
+
+            if (absX < m_Resistents) return 0;
+
+            if (velocity > 0)
+            {
+                velocity += -m_Speed * elapsedSec;
+            }
+            else if (velocity < 0)
+            {
+                velocity += m_Speed * elapsedSec;
+            }
+
+            return velocity;
+        }
+        //UPDATES
         public void Update(float elapsedSec)
         {
             TextureUpdate(elapsedSec, 0.25f);
+            //Slow down player when stops moving Horzontal X
+            if(m_Velocity.Y == 0)
+            m_Velocity.X = ResitenceCalc(m_Velocity.X, elapsedSec);
+            //SPEED LIMIT
+            m_Velocity.X = SpeedLimit(m_Velocity.X, m_MaxSpeed);
+            m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_MaxSpeed);
             //if up timer jump for 2s or so do no you see
             m_Velocity.Y += m_Gravity * elapsedSec;
             m_Velocity.X += m_Direction.X * m_Speed * elapsedSec;
@@ -206,8 +258,7 @@ namespace MyPlayer
             m_SourceRect.Width -= m_SourceRect.Width / 100 * 10;
             m_SourceRect.Height -= m_SourceRect.Height / 100 * 20;
             m_SourceRect.Y += m_SourceRect.Height / 100 * 20;
-        }
-        
+        } 
         /// <summary>
         /// Its working!!. it check colison of the vertics and 
         /// if it hit somthing and the directions of the velocty is the same 
@@ -289,7 +340,6 @@ namespace MyPlayer
             rect.X += horizontalDepth / 2;
             rect.Y += verticalDepth / 2;
         }
-
         //SETTERS
         private void SetAnimation(CurantMovment movment)
         {
@@ -326,12 +376,12 @@ namespace MyPlayer
         }
         private void SetColisonRect(RectangleF drawRect)
         {
-            float marginW = 0;
+            float marginH = drawRect.Height/100 * 5;
             float width = drawRect.Width / 1.9f;
-            float height = drawRect.Height / 1.6f;
-            if (m_Velocity.X < 0) marginW = -marginW;
-            m_ColisionRect.X = drawRect.X + (drawRect.Width - width) / 2 - marginW;
-            m_ColisionRect.Y = drawRect.Y + (drawRect.Height - height);
+            float height = drawRect.Height / 1.3f;
+
+            m_ColisionRect.X = drawRect.X + (drawRect.Width - width) / 2;
+            m_ColisionRect.Y = drawRect.Y + (drawRect.Height - height) - marginH;
             m_ColisionRect.Width = width;
             m_ColisionRect.Height = height;
         }
@@ -361,7 +411,7 @@ namespace MyPlayer
             //DEATH
             m_AnimationHandeler.AddRow(9);
         }
-        public void SetVelocty(Vector2 velocty)
+        public void SetDirection(Vector2 velocty)
         {
             m_Direction = velocty;
         }

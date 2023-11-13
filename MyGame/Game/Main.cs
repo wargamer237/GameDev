@@ -54,7 +54,7 @@ namespace MyGame
 
             m_MapHandeler.Update(elapsedSec);
             m_Player.SetVertexs(m_MapHandeler.CheckMapColison(m_Player.GetVertexs()));
-            m_Player.SetVelocty(m_PlayerManger.GetDirection());
+            m_Player.SetDirection(m_PlayerManger.GetDirection());
             m_Player.Update(elapsedSec);
 
             foreach (Player p in m_LPlayers)
