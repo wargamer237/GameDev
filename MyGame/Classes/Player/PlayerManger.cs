@@ -2,32 +2,30 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
-
+using MyCreature;
 namespace MyPlayer
 {
     internal class PlayerManger
     {
-        Vector2 m_Velocity;
+        
+        Vector2 m_DirectionVelocity;
         Direction m_Direction;
-
-        bool m_Jumping;
-        float m_JumpTimer;
-        float m_JumpDuration;
+        Vector2 m_ExtraDirection;
         public PlayerManger()
         {
-            m_JumpDuration = 2;//s
         }
         public Vector2 GetDirection()
         {
-            m_Velocity.X = (int)m_Direction.Horzontal;
-            m_Velocity.Y = (int)m_Direction.Vertical;
-            return m_Velocity;
+            m_DirectionVelocity.X = (int)m_Direction.Horzontal * m_ExtraDirection.X;
+            m_DirectionVelocity.Y = (int)m_Direction.Vertical;
+            return m_DirectionVelocity;
         }
         public void KeyEvents(KeyboardState keyboardState)
         {
             m_Direction.Horzontal = DirectionValue.None;
             m_Direction.Vertical = DirectionValue.None;
-            
+            m_ExtraDirection.X = 1;
+            m_ExtraDirection.Y = 1;
             //left right up down keys
             if (keyboardState.IsKeyDown(Keys.Left))
             {
@@ -45,12 +43,23 @@ namespace MyPlayer
                 m_Direction.Vertical = DirectionValue.Negetive;
             }
             if (keyboardState.IsKeyDown(Keys.Down))
-            {
+            {               
                 if (m_Direction.Vertical == DirectionValue.Positve)
                     m_Direction.Vertical = DirectionValue.None;
                 m_Direction.Vertical = DirectionValue.Positve;
             }
+            if (keyboardState.IsKeyDown(Keys.LeftShift))
+            {
+                m_ExtraDirection.X = 2;
+            }
             //other controls
+        }
+        public void Update(ref Player player, float elapsedSec)
+        {
+            KeyboardState keyboardState = Keyboard.GetState();
+            KeyEvents(keyboardState);
+            player.SetDirection(GetDirection());
+            player.Update(elapsedSec);
         }
     }
 }

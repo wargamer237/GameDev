@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MyBlocks;
+using Microsoft.Xna.Framework;
 using MyUtils;
 
-namespace Blocks
+namespace MyBlocks
 {
     internal class Ground : Block, ICollidable
     {
@@ -17,12 +18,6 @@ namespace Blocks
             this.SetColor(Color.Yellow);
             this.SetTexture($"Textures/Tiles/Ground/{tileType}tile.png"); //bv
             this.SetSourceRect(new Rectangle());
-        }
-
-
-        public bool CheckCollision(RectangleF otherRect)
-        {
-            return false;
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using MyUtils;
 using Microsoft.Xna.Framework;
-namespace Blocks
+namespace MyBlocks
 {
     internal interface ICollidable
     {
     }
     internal interface IMovable
     {
-        bool Update(float elapsedSec);
+        void Update(float elapsedSec);
+        Vector2 GetVelocty();
     }
     //--ADD make it interactable with player*. OR OTHER?
     internal interface IInteractable

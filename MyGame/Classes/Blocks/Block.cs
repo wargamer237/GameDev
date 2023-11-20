@@ -1,7 +1,8 @@
 ﻿using MyUtils;//HAS MY RectF :)
 using Microsoft.Xna.Framework; //HAS NO RectF :'(
+using MyBlocks;
 
-namespace Blocks
+namespace MyBlocks
 {
     public enum BlockType
     {
@@ -22,7 +23,7 @@ namespace Blocks
         CenterBottom = 8,
         RightBottom = 9
     }
-    internal class Block
+    public class Block
     {
         protected RectangleF m_Rect;
         protected Color m_Color;
@@ -42,12 +43,12 @@ namespace Blocks
         }
         public Block(RectangleF rect, Rectangle sourceRect, int tileType)
         {
+            m_Rect = rect;
             this.IsBlock(false);
             this.SetColor(Color.Transparent);
             this.SetSourceRect(sourceRect);
             this.SetTexture("");
         }
-
         public virtual void Draw()
         {
             if (!m_IsBlock) return;
@@ -62,14 +63,12 @@ namespace Blocks
             UtilsStatic.PushTranslate(-m_Rect.X, -m_Rect.Y);//coment OR THIS 
             //UtilsStatic.PopMatrix();
         }
-
-        /* --CHECK
-        FOR MOVE OBJECTS
+        /* --!CHECK
+        MOVE OBJECT
         public void Update(float elapsedSec)
         {
             //FUTURE BART ISUE XD.
         }*/
-
         public RectangleF GetRect()
         {
             return m_Rect;

@@ -1,4 +1,4 @@
-﻿using Blocks;
+﻿using MyBlocks;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ namespace MyUtils
         public PointF Second;
         public bool Colided;
         public float Depth;
+        public Block Block;
         public Vertexs()
         {
             First = new PointF();
@@ -18,6 +19,8 @@ namespace MyUtils
 
             Depth = 0;
             Colided = false;
+
+            Block = null;
         }
         public Vertexs(PointF a, PointF b)
         {
@@ -26,16 +29,21 @@ namespace MyUtils
 
             Depth = 0;
             Colided = false;
+            Block = null;
         }
         public Vector2 GetVectorDirection(PointF a , PointF b)
         {
             return new Vector2(b.X - a.X, b.Y - a.Y);
         }
+        public Vector2 GetVectorDirection()
+        {
+            return new Vector2(Second.X - First.X, Second.Y - First.Y);
+        }
     }
 
     internal class MyColison
     {
-        public static Vertexs VertexWithInRectangle(ref Vertexs vertex, RectangleF rectangle)
+        public static bool VertexWithInRectangle(ref Vertexs vertex, RectangleF rectangle)
         {
             // Check if First or Second points of Vertexs are inside RectangleF.
             //--! MABY SWAP FALSE WITH TRUE for shorter code. ANSWERE: nhe
@@ -43,12 +51,12 @@ namespace MyUtils
             {
                 vertex.Colided = true;
                 vertex.Depth = GetVertexDepth(vertex.First,vertex.Second,rectangle);
-                return vertex; // Collision detected.
+                return vertex.Colided; // Collision detected.
             }
             // No collision detected.
             vertex.Colided = false;
             vertex.Depth = 0;
-            return vertex;
+            return vertex.Colided;
         }
         public static float GetVertexDepth(PointF first, PointF second, RectangleF rect)
         {
@@ -94,21 +102,21 @@ namespace MyUtils
 
             return vertexsList;
         }
-        public static List<Vertexs> VertexsListCollisionWithRectangle(ref List<Vertexs> vertexsList, RectangleF block)
+        public static bool VertexsListCollisionWithRectangle(ref List<Vertexs> vertexsList, RectangleF block, Block b = null)
         {
+            bool colided = false;
             // Loop through each Vertexs using its index as the identifier.
             for (int i = 0; i < vertexsList.Count; i++)
             {
                 Vertexs vertex = vertexsList[i];
                 if (vertex.Colided == true) continue;
                 // Check for collisions with each RectangleF block. 
-                VertexWithInRectangle(ref vertex, block);
-
+                colided = VertexWithInRectangle(ref vertex, block);
+                if (vertex.Colided && b != null) vertex.Block = b;
                 //update vertex even if not hit. (depth and colsion rest
                 vertexsList[i] = vertex;
             }
-
-            return vertexsList;
+            return colided;
         }
     }
 }

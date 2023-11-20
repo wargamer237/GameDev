@@ -2,7 +2,7 @@
 using MyUtils;
 using System;
 
-namespace Blocks
+namespace MyBlocks
 {
     internal class BackGround : Block
     {

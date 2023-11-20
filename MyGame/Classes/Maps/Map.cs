@@ -1,5 +1,7 @@
 ﻿
-using Blocks;
+using MyBlocks;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MyMap
 {
@@ -15,7 +17,8 @@ namespace MyMap
     public enum MapTypes
     {
         TestMap = -1,
-        Tutorial = 0
+        Tutorial = 0,
+        Level1 = 1
     }
     internal class Map
     {
@@ -38,6 +41,20 @@ namespace MyMap
         {
             SetMap();
         }
+        private void PickMap(MapTypes map = MapTypes.TestMap)
+        {
+            switch (map)
+            {
+                case MapTypes.TestMap:
+                    break;
+                case MapTypes.Tutorial:
+                    break;
+                case MapTypes.Level1:
+                    break;
+                default:
+                    break;
+            }
+        }
         private void SetMap()
         {
             Grid gridLayout = new Grid();
@@ -45,42 +62,20 @@ namespace MyMap
             gridLayout.YChunck = 5;
             gridLayout.XBlock = 5;
             gridLayout.YBlock = 5;
-            gridLayout.BlockSize = 200;
+            gridLayout.BlockSize = 100;
             m_GridLayout = gridLayout;
             m_IntedMap = InitializeMap(gridLayout);
-            int[][] chunck1 = {
-                new int[] { 1, 1, 1, 1, 1 },
-                new int[] { 1, 0, 0, 1, 1 },
-                new int[] { 1, 0, 3, 3, 1 },
-                new int[] { 1, 0, 1, 1, 1 },
-                new int[] { 1, 1, 1, 0, 0 }
-            };
-            int[][] chunck2 = {
-                new int[] { 0, 0, 0, 1, 1 },
-                new int[] { 0, 0, 3, 3, 1 },
-                new int[] { 0, 1, 3, 3, 1 },
-                new int[] { 1, 1, 3, 3, 1 },
-                new int[] { 0, 1, 0, 3, 1 }
-            };
-          /* int[][] chunck2 = {
-                new int[] { 3, 3, 3, 3, 3 },
-                new int[] { 3, 0, 0, 0, 3 },
-                new int[] { 3, 0, 0, 0, 3 },
-                new int[] { 3, 0, 0, 0, 3 },
-                new int[] { 3, 3, 3, 3, 3 }
-            };*/
-
-            AddChunck(chunck1, gridLayout, 0, 0);
-           AddChunck(chunck2, gridLayout, 1, 1);
+            TestMap();
         }
         private void AddChunck(int[][] values, Grid gridLayout, int x, int y)
         {
             // Check if 'x' and 'y' are within the boundaries of the grid layout
-            if (x > 0 && x < gridLayout.XChunck && y < 0 && y < gridLayout.YChunck) return;
+            if (x < 0 || x >= gridLayout.XChunck || y < 0 || y >= gridLayout.YChunck) return;
 
-            int chunck = y * gridLayout.XChunck + x + y; //dont know why but i have to add y beacuse there is exponential shit to the left some how
+            int chunck = y * gridLayout.XChunck + x + y;
             m_IntedMap[chunck] = values;
         }
+
 
         private int[][][] InitializeMap(Grid gridLayout)
         {
@@ -98,6 +93,146 @@ namespace MyMap
             }
 
             return newIntArray;
+        }
+
+        private void TestMap()
+        {
+            List<int[][]> mapList = new List<int[][]>();
+
+            mapList.AddRange(FirstRow());
+            
+            int[][] chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 0, 0, 0, 0 },
+                new int[] { 1, 1, 0, 0, 0 },
+                new int[] { 0, 1, 1, 0, 0 },
+                new int[] { 0, 1, 1, 0, 0 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 2, 0, 2 },
+                new int[] { 0, 1, 1, 1, 1 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 2, 2, 2, 2, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 1, 1, 1, 0 }
+            };
+            mapList.Add(chunck);
+           
+
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 2, 2, 2, 2, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 2, 2, 2, 0, 0 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 1, 1, 1, 1 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 1, 1, 1, 1 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 1, 1, 1, 1 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 1, 1, 1, 1 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 0, 0, 0, 1, 0 },
+                new int[] { 0, 0, 1, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 1, 1, 1, 1 }
+            };
+            mapList.Add(chunck);
+            int y = 0;
+            for (int i = 0; i < mapList.Count; i++)
+            {
+                if (y > m_GridLayout.YChunck) break;
+                for (int x = 0; x < m_GridLayout.XChunck; x++)
+                {
+                    if (mapList.Count == i) break;
+                    AddChunck(mapList[i], m_GridLayout, x, y);
+                    i++;
+
+                }
+                y++;
+            }
+        }
+        private List<int[][]> FirstRow()
+        {
+            List<int[][]> mapList = new List<int[][]>();
+            int[][] chunck = {
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 1, 0, 1, 0 },
+                new int[] { 1, 1, 0, 1, 1 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 0, 1, 1, 0 },
+                new int[] { 0, 0, 1, 1, 0 },
+                new int[] { 1, 0, 1, 1, 0 },
+                new int[] { 1, 1, 1, 1, 0 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 0, 0, 0, 1 },
+                new int[] { 1, 0, 1, 1, 1 },
+                new int[] { 1, 1, 1, 1, 0 },
+                new int[] { 0, 1, 0, 0, 0 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 0, 0, 0, 0 },
+                new int[] { 1, 1, 0, 0, 0 },
+                new int[] { 0, 1, 1, 0, 0 },
+                new int[] { 0, 1, 1, 0, 0 }
+            };
+            mapList.Add(chunck);
+            chunck = new int[][]{
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 1, 0, 0, 0, 0 },
+                new int[] { 1, 1, 0, 0, 0 },
+                new int[] { 0, 1, 1, 0, 0 },
+                new int[] { 0, 1, 1, 0, 0 }
+            };
+            mapList.Add(chunck);
+            return mapList;
         }
     }
 }

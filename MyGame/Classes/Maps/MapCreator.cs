@@ -1,5 +1,5 @@
 ﻿using MyUtils;
-using Blocks;
+using MyBlocks;
 using System.Collections.Generic;
 
 namespace MyMap
@@ -131,6 +131,11 @@ namespace MyMap
                 case (int)BlockType.Ground:
                     block = new Ground(rect, tileType);
                     break;
+                case (int)BlockType.Platform:
+                    Platform p = new Platform(rect, tileType);
+                    p.SetPath(new PointF(0, 0), new PointF(3, 0), 2);
+                    block = p;
+                    break;
             }
             return block;
         }
@@ -149,7 +154,7 @@ namespace MyMap
                 }
             }
             //FILL ARRAY EMPTY BLOCKS 
-            //MABY REMOVE maby let null data save and run time
+            //--!MABY Change to background blocks later 
             //ADD EMPTY BLOCKS IN THE LIST
             int size = 200;
             for (int chunck = 0; chunck < newBlocks.Length; chunck++)
