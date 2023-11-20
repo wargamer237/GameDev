@@ -11,5 +11,6 @@ see at DrawClass.cs from line 8 function name: "public static Texture2D GetTextu
 2)06/11 Fixed the creating of a chunk where you move a chunk by y it woud shift 1 back from its row. 
 3)13/11 Player has textures(stand,move,jump,fall)
 Player has slowing down efect for movment and colions with rects by (my Colision class that use self made Vertics).
-
-
+4)added moving platfroms and some test chunks.
+5) fix that player woud face true platforms.
+And change the set up of using player. Player is now a 'Creature' and he is in the same List as Creature. 
