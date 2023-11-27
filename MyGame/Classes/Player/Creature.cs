@@ -29,16 +29,29 @@ namespace MyCreature
         protected RectangleF m_ColisionRect;
         protected List<Vertexs> m_Vertexs;
         protected List<RectangleF> m_VerticxDebugRects;
-
+        //
+        int m_Health;
+        bool m_GotHit;
         //GETTERS SETTERS VARS
         //location
        
-        public Creature() { }
-        public Creature(RectangleF playerRect) 
+        public Creature() 
         {
             Intelize();
+            SetColisonRect(m_DrawRect);
+            IntelizeVertexs();
         }
-        private void Intelize()
+        public Creature(RectangleF creatureRect) 
+        {
+            Intelize();
+            m_DrawRect = creatureRect;
+            m_StartPosition.X = creatureRect.X;
+            m_StartPosition.Y = creatureRect.Y;
+            SetColisonRect(m_DrawRect);
+            IntelizeVertexs();
+        }
+        //INTELIZE
+        virtual protected void Intelize()
         {
             m_TexturePath = "Textures/Player/PlayerSheet3.png";
             m_VerticxDebugRects = new List<RectangleF>();
@@ -51,7 +64,6 @@ namespace MyCreature
             m_DrawRect.Height = 100;
             m_LookRight = true;
         }
-        //INTELIZE
         protected List<Vertexs> IntelizeVertexs()
         {
             // Player values
@@ -123,6 +135,7 @@ namespace MyCreature
             SetVertexs(vertexsList);
             return vertexsList;
         }
+        
         //DRAW
         public virtual void Draw()
         {
@@ -131,11 +144,11 @@ namespace MyCreature
                 directions = SpriteEffects.FlipHorizontally;
             UtilsStatic.NewPush();
             UtilsStatic.PushTranslate(m_DrawRect.X - m_DrawRect.Width / 2, m_DrawRect.Y - m_DrawRect.Height / 2);
-            /*DEBUG /
-            tilsStatic.SetColor(Color.Red);
+            /* DEBUG /
+            UtilsStatic.SetColor(Color.Red);
             UtilsStatic.DrawRect(new RectangleF(m_DrawRect.Width / 2, m_DrawRect.Height / 2, m_DrawRect.Width, m_DrawRect.Height));          
             UtilsStatic.SetColor(Color.Black);
-            / */
+            //*/
             UtilsStatic.DrawTexture(new RectangleF(m_DrawRect.Width / 2, m_DrawRect.Height / 2, m_DrawRect.Width, m_DrawRect.Height)
                 , m_SourceRect, m_TexturePath, directions);
 
@@ -149,8 +162,172 @@ namespace MyCreature
                 UtilsStatic.ResetColor();
             }
         }
+        //MACANICS
+        protected float SpeedLimit(float velocity, float limit, float directionSpeed = 0)
+        {
+            limit = MathF.Max(limit, limit * MathF.Abs(directionSpeed));
+            if (velocity > limit)
+            {
+                velocity = limit;
+            }
+            else if (velocity < -limit)
+            {
+                velocity = -limit;
+            }
+            return velocity;
+        }
         //UPDATE
-        public virtual void Update(float elapsedSec) { }
+        public virtual void Update(float elapsedSec) 
+        {
+            //Gravity standard
+            m_Velocity.Y += m_Gravity * elapsedSec;
+            m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_Gravity);
+            
+            //Check colisions
+            UpdateColision(ref m_DrawRect);
+            UpdateRects(elapsedSec);
+        }
+        /// <summary>
+        /// Its working!!.
+        /// it check colison of the vertics and 
+        /// if it hit somthing and the directions of the velocty is the same 
+        /// then it applys the efect of hiting a wal (snap the wall in 2 steps)
+        /// if you change direction it will check that sinde IF THERE IS COLISION
+        /// (ps: all vertics are always checking for colison: see maphandeler)
+        /// </summary>
+        protected void UpdateColision(ref RectangleF rect)
+        {
+            float horizontalDepth = 0;
+            float verticalDepth = 0;
+            foreach (Vertexs vertex in m_Vertexs)
+            {
+                if (!vertex.Colided) continue; // Skip non-colliding vertexes
+
+                PointF First = vertex.First;
+                PointF Second = vertex.Second;
+                Vector2 direction = vertex.GetVectorDirection();
+                if (direction.Y == 0) // Horizontal Vertex
+                {
+                    if (horizontalDepth < vertex.Depth) horizontalDepth = vertex.Depth;
+
+
+                    if (direction.X > 0)
+                    {
+                        if (m_ExternVelocity.X < 0)
+                        {
+                            if (m_Velocity.X > 0)
+                            {
+                                m_Velocity.X = 0;
+                                horizontalDepth = 0;
+                            }
+                            m_ExternVelocity.X -= horizontalDepth;
+
+                            continue;
+                        }
+                        else if (m_ExternVelocity.X > 0)
+                        {
+                            m_Velocity.X = -m_ExternVelocity.X;
+                            horizontalDepth = 0;
+                            continue;
+                        }
+                        // right side: so move last bit to right
+                        if (m_Velocity.X > 0)
+                        {
+                            m_Velocity.X = horizontalDepth;
+                        }
+                        else if (m_ExternVelocity.X > 0)
+                        {
+                            m_ExternVelocity.X = horizontalDepth;
+                        }
+                        else
+                        {
+                            horizontalDepth = 0;
+                        }
+
+                    }
+                    else // left side: so move last bit to left
+                    {
+                        horizontalDepth = -horizontalDepth;
+                        if (m_ExternVelocity.X > 0)
+                        {
+                            if (m_Velocity.X < 0)
+                            {
+                                m_Velocity.X = 0;
+                                horizontalDepth = 0;
+                            }
+                            m_ExternVelocity.X -= horizontalDepth;
+
+
+                            continue;
+                        }
+                        else if (m_ExternVelocity.X < 0)
+                        {
+                            m_Velocity.X = -m_ExternVelocity.X;
+                            horizontalDepth = 0;
+                            continue;
+                        }
+                        if (m_Velocity.X < 0)
+                        {
+                            m_Velocity.X = horizontalDepth;
+                        }
+                        else if (m_ExternVelocity.X < 0)
+                        {
+                            m_ExternVelocity.X = horizontalDepth;
+                        }
+                        else
+                        {
+                            m_ExternVelocity.X = horizontalDepth;
+                            horizontalDepth = 0;
+                        }
+                    }
+                }
+                else // Vertexal Vertex
+                {
+                    if (verticalDepth < vertex.Depth) verticalDepth = vertex.Depth;
+
+                    if (direction.Y > 0)
+                    { // down side: so move last bit to down
+
+                        if (m_Velocity.Y > 0)
+                        {
+                            m_Velocity.Y = verticalDepth;
+                        }
+                        else
+                        {
+                            verticalDepth = 0;
+                        }
+                    }
+                    else // up side: so move last bit to up
+                    {
+                        if (m_Velocity.Y < 0)
+                        {
+                            verticalDepth = -verticalDepth;
+                            m_Velocity.Y = verticalDepth;
+                        }
+                        else
+                        {
+                            verticalDepth = 0;
+                        }
+                    }
+                }
+            }
+            rect.X += horizontalDepth / 2;
+            rect.Y += verticalDepth / 2;
+        }
+        protected void UpdateRects(float elapsedSec)
+        {
+            Vector2 totaalVelocty =
+                new Vector2(
+                m_Velocity.X * elapsedSec + m_ExternVelocity.X * elapsedSec,
+                m_Velocity.Y * elapsedSec + m_ExternVelocity.Y * elapsedSec);
+            m_DrawRect.X += totaalVelocty.X;
+            m_DrawRect.Y += totaalVelocty.Y;
+            m_ExternVelocity = new Vector2(0, 0);
+            if (totaalVelocty.X > 0) m_LookRight = true;
+            if (totaalVelocty.X < 0) m_LookRight = false;
+            SetColisonRect(m_DrawRect);
+        }
+        
         //SETTERS
         public void SetExternVelocty(Vector2 externVelocity)
         {
@@ -160,7 +337,7 @@ namespace MyCreature
         {
             m_Vertexs = vertexs;
         }
-        protected void SetColisonRect(RectangleF drawRect)
+        protected virtual void SetColisonRect(RectangleF drawRect)
         {
             float marginH = drawRect.Height / 100 * 5;
             float width = drawRect.Width / 1.9f;
@@ -171,6 +348,7 @@ namespace MyCreature
             m_ColisionRect.Width = width;
             m_ColisionRect.Height = height;
         }
+
         //GETTERS
         public RectangleF GetRect()
         {

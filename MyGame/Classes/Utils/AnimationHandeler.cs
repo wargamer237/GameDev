@@ -70,10 +70,11 @@ namespace MyUtils
 
             UpdateSourceRectPos();
         }
-        public void SetAnimation(int row,int startingColum = 0, int columMin = 0, int columMax = -1)
+        public void SetAnimation(int row, int startingColum = 0, int columMin = 0, int columMax = -1)
         {
             //if animation in use
             if (m_CurantRow == row) return;
+            m_CurantRow = row;
             //ROWS
             m_CurantTime = 0;
             m_CurantRow = row;

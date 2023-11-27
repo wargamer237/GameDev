@@ -8,22 +8,23 @@ using System.Threading.Tasks;
 
 namespace MyUtils
 {
-    internal interface HasAnimations
+    internal interface HasAnimations <animation>
     {
-        enum CurantMovment {non }
-
         private void TextureUpdate(float elapsedSec, float animationDuration)
         {
+
         }
-        private void SetAnimation(CurantMovment movment)
+        private void SetAnimation(animation movment)
         {
+
         }
         private void SetAnimationTextures(int x, int y)
         {
+
         }
-        private CurantMovment GetAnimationType()
+        private animation GetAnimationType()
         {
-            return CurantMovment.non;
+            throw new Exception();
         }
     }
 }

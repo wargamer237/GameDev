@@ -386,7 +386,7 @@ namespace MyUtils//DrawingClasses
 
         //GET POINT INFROMATION 
         //CENTER OF ALL POINTS
-        public static Vector2 GetCenterOfPoints(List<Vector2> vertexes)
+        public static PointF GetCenterOfPoints(List<Vector2> vertexes)
         {
             if (vertexes == null || vertexes.Count == 0) throw new ArgumentException("List of points cannot be null or empty");
 
@@ -402,12 +402,11 @@ namespace MyUtils//DrawingClasses
             float centerX = totalX / vertexes.Count;
             float centerY = totalY / vertexes.Count;
 
-            return new Vector2(centerX, centerY);
+            return new PointF(centerX, centerY);
         }
-        public static Vector2 GetCenterRect(RectangleF rect)
+        public static PointF GetCenterRect(RectangleF rect)
         {
-            Vector2 center = new Vector2(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
-            return center;
+            return new PointF(rect.X + rect.Width / 2, rect.Y + rect.Height / 2); ;
         }
 
         // Custom Contains method for RectangleF to check if a point is inside the rectangle.

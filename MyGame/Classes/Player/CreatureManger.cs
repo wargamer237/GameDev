@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MyUtils;
-using MyPlayer;
 using MyBlocks;
+using MyPlayer;
+using System.Numerics;
 namespace MyCreature
 {
     internal class CreatureManger
@@ -13,39 +14,42 @@ namespace MyCreature
         List<Creature> m_Creatures;
         public CreatureManger()
         {
-            m_Creatures = new List<Creature>{ new Player(new RectangleF(200,-200,100,100)) };
-            m_Creatures.Add(new Player(new RectangleF(190, -200, 100, 100)));
-
+            m_Player = new Player(new RectangleF(200, -200, 100, 100));
+            m_FocuedTarget = m_Player;
+            m_Creatures = new List<Creature>{ m_Player };
+            m_Creatures.Add(new Robot(new RectangleF(170, -200, 150, 100)));
+            m_Creatures.Add(new Player  (new RectangleF(190, -200, 100, 100)));
         }
         public void Draw()
         {
+            m_Player.Draw();
             for (int i = m_Creatures.Count -1; i >= 0; i--)
             {
+                if(m_Creatures[i] is Robot r)
+                {
+                    r.DebugDraw();
+                }
                 m_Creatures[i].Draw();
             }
-
         }
         public void Update(float elapsedSec)
         {
-            bool realPlayer = true;
+            PlayerUpdate(ref m_Player, elapsedSec);
+
             for (int i = 0; i < m_Creatures.Count; i++)
             {
                 Creature creature = m_Creatures[i];
-                if(creature is Player player)
+                
+                if(creature != m_Player)
                 {
-                    if(realPlayer)
-                    {
-                        realPlayer = false;
-                        m_Player = player;
-                        m_FocuedTarget = player;
-                        PlayerUpdate(ref m_Player, elapsedSec);
-                    }
-                    else
-                    {
-                        player.Update(elapsedSec);
-                    }
-                    creature = BlocksIntreactions(creature);
+                    creature.Update(elapsedSec);
                 }
+                if (creature is Robot r)
+                {
+                    r.SettTarget(m_Player);
+                    m_FocuedTarget = r;
+                }
+                creature = BlocksIntreactions(creature);
 
                 m_Creatures[i] = creature;
             }

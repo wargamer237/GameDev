@@ -9,17 +9,8 @@ namespace MyGame.Classes.interfaces
 {
     internal interface ICheckColisions
     {
-        private void UpdateColision(ref RectangleF rect)
-        {
-
-        }
-        public void SetVertexs(List<Vertexs> vertexs)
-        {
-
-        }
-        public List<Vertexs> GetVertexs()
-        {
-            return new List<Vertexs>();
-        }
+       void UpdateColision(ref RectangleF rect);
+        void SetVertexs(List<Vertexs> vertexs);
+        public List<Vertexs> GetVertexs();
     }
 }
