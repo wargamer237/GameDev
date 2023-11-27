@@ -56,19 +56,20 @@ namespace MyUtils
             m_RowsTexture.Add(animationCount);
         }
 
-        public void UpdateTexture(float elapsedSec, float animationDuration)
+        public bool UpdateTexture(float elapsedSec, float animationDuration)
         {
             // if Row has no animations : NOT USING
-            if (m_MaxRange == -1) return;
+            if (m_MaxRange == -1) return true;
             m_CurantTime += 2 * elapsedSec;
             //time did not run out
-            if (m_CurantTime < animationDuration) return;
+            if (m_CurantTime < animationDuration) return false;
             m_CurantTime = 0;
             //reset
             if (m_MaxRange == m_CurantColum) m_CurantColum = m_MinRange;
             m_CurantColum++;
 
             UpdateSourceRectPos();
+            return true;
         }
         public void SetAnimation(int row, int startingColum = 0, int columMin = 0, int columMax = -1)
         {

@@ -25,7 +25,7 @@ namespace MyCreature
             m_Player.Draw();
             for (int i = m_Creatures.Count -1; i >= 0; i--)
             {
-                if(m_Creatures[i] is Robot r)
+                if(m_Creatures[i] is AttackCreature r)
                 {
                     r.DebugDraw();
                 }
@@ -46,8 +46,7 @@ namespace MyCreature
                 }
                 if (creature is Robot r)
                 {
-                    r.SettTarget(m_Player);
-                    m_FocuedTarget = r;
+                    m_Player.GotHit(r.SettTarget(m_Player));
                 }
                 creature = BlocksIntreactions(creature);
 
@@ -58,6 +57,14 @@ namespace MyCreature
         public void PlayerUpdate(ref Player player, float elapsedSec)
         {
             m_PlayerManger.Update(ref player, elapsedSec);
+            bool Dead = player.GetDeathState();
+            if (Dead)
+            {
+                m_Creatures.Remove(player);
+                player = new Player(new RectangleF(0, 0, 100, 100));
+                m_Creatures.Add(player);
+                m_FocuedTarget = player;
+            }
         }
         public Creature BlocksIntreactions(Creature creature)
         {

@@ -29,20 +29,25 @@ namespace MyCreature
         protected RectangleF m_ColisionRect;
         protected List<Vertexs> m_Vertexs;
         protected List<RectangleF> m_VerticxDebugRects;
-        //
-        int m_Health;
-        bool m_GotHit;
+        //Hp stats
+        protected int m_Health;
+        protected bool m_Dead;
+        protected float m_DeathDuration;
+        protected bool m_GotHit;
         //GETTERS SETTERS VARS
         //location
-       
+
         public Creature() 
         {
+
             Intelize();
             SetColisonRect(m_DrawRect);
             IntelizeVertexs();
         }
         public Creature(RectangleF creatureRect) 
         {
+            m_Health = 5;
+            m_Dead = false;
             Intelize();
             m_DrawRect = creatureRect;
             m_StartPosition.X = creatureRect.X;
@@ -179,6 +184,7 @@ namespace MyCreature
         //UPDATE
         public virtual void Update(float elapsedSec) 
         {
+            if (m_Dead) return;
             //Gravity standard
             m_Velocity.Y += m_Gravity * elapsedSec;
             m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_Gravity);
@@ -327,7 +333,15 @@ namespace MyCreature
             if (totaalVelocty.X < 0) m_LookRight = false;
             SetColisonRect(m_DrawRect);
         }
-        
+        //OTHER PUBLIC 
+        public void GotHit(bool hit)
+        {
+            if (!hit) { m_GotHit = false; return; }
+            if (m_Health > 0)
+                m_Health--;
+            m_GotHit = true;
+            if (m_Health == 0) m_Dead = true;
+        }
         //SETTERS
         public void SetExternVelocty(Vector2 externVelocity)
         {
@@ -361,6 +375,10 @@ namespace MyCreature
         public List<Vertexs> GetNewVertexs()
         {
             return IntelizeVertexs();
+        }
+        public virtual bool GetDeathState()
+        {
+            return m_Dead;
         }
     }
 }

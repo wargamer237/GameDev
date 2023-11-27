@@ -16,3 +16,4 @@ Player has slowing down efect for movment and colions with rects by (my Colision
 And change the set up of using player. Player is now a 'Creature' and he is in the same List as Creature. 
 6) 20/11 Fix 98% of coliosn isues and fix up Creature class. 
 7) 27/11 Added a enemy(rotot) and a attack to the enemy. (but gone be replaced with AttackCreature and become a child of that)
+8) 27/11 Player has attacks + video in videoCurantState(change per video)

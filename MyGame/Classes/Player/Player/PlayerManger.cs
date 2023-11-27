@@ -10,8 +10,10 @@ namespace MyPlayer
         Vector2 m_DirectionVelocity;
         Direction m_Direction;
         Vector2 m_ExtraDirection;
+        Player.CurantMovment m_AttackType;
         public PlayerManger()
         {
+            m_AttackType = Player.CurantMovment.None;
         }
         public Vector2 GetDirection()
         {
@@ -51,12 +53,28 @@ namespace MyPlayer
             {
                 m_ExtraDirection.X = 2;
             }
+            //attacks Keys
+            m_AttackType = Player.CurantMovment.None;
+            if (keyboardState.IsKeyDown(Keys.A))
+            {
+                m_AttackType = Player.CurantMovment.AttackOne;
+            }
+            if (keyboardState.IsKeyDown(Keys.Z))
+            {
+                m_AttackType = Player.CurantMovment.AttackTwo;
+            }
+            if (keyboardState.IsKeyDown(Keys.E))
+            {
+                m_AttackType = Player.CurantMovment.AttackThree;
+            }
+
             //other controls
         }
         public void Update(ref Player player, float elapsedSec)
         {
             KeyboardState keyboardState = Keyboard.GetState();
             KeyEvents(keyboardState);
+            player.SetAttack(m_AttackType);
             player.SetDirection(GetDirection());
             player.Update(elapsedSec);
         }

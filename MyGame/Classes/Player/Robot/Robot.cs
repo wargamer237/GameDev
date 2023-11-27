@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace MyCreature
 {
-    internal class Robot : Creature, HasAnimations<Robot.CurantMovment>
+    internal class Robot : AttackCreature, HasAnimations<Robot.CurantMovment>
     {
         //ENUMS 
         //ACTION ENUM
@@ -37,16 +37,7 @@ namespace MyCreature
         bool m_HitWall = false;
         bool m_IsWaiting = true;
         bool m_Waking = false;
-        public void DebugDraw()
-        {
-            UtilsStatic.NewPush();
-            UtilsStatic.PushTranslate(m_AttackRect.X - m_AttackRect.Width / 2, m_AttackRect.Y - m_AttackRect.Height / 2);
-            if(m_AttackIsLethal)UtilsStatic.SetColor(Color.Red);
-            else UtilsStatic.SetColor(Color.Green);
-            UtilsStatic.DrawRect(new RectangleF(m_AttackRect.Width / 2, m_AttackRect.Height / 2, m_AttackRect.Width, m_AttackRect.Height));
-            UtilsStatic.ResetColor();
-            UtilsStatic.PopMatrix();
-        }
+       
             //CONSTRUCTOR
         public Robot(RectangleF playerRect) : base(playerRect)
         {
@@ -56,6 +47,10 @@ namespace MyCreature
             m_AttackDuration = 1;
             m_AttackStartTimer = new MyTimer(m_AttackStartDuration);
             m_AttackTimer = new MyTimer(m_AttackDuration);
+
+            m_AgroRange = 600;
+            m_TargetingRange = 300;
+            m_AttackRange = 100;
         }
         public Robot()
         {
@@ -107,130 +102,38 @@ namespace MyCreature
                 m_Velocity.X = 0;
             }
         }
-        //Targeting
-        float m_TargetingRange;
-        float m_AttackRange;
-        float m_AgroRange;
-        bool m_Attack;
-        bool m_Targeting;
-        Vector2 m_TargetDirection;
-        public bool SettTarget(Creature creature)
+        //Get AttackRect 
+        private RectangleF GetAttackRect()
         {
-            PointF creatureCenter = UtilsStatic.GetCenterRect(creature.GetRect());
-            PointF myCenter = UtilsStatic.GetCenterRect(m_ColisionRect);
-            m_AgroRange = 300;
-            m_TargetingRange = 200;
-            m_AttackRange = 100;
-            //distance crom eatch center point
-            float distance = Math.Abs(creatureCenter.X - myCenter.X) + Math.Abs(creatureCenter.Y - myCenter.Y);
-            //is out of AgroRange
-            if (distance >= m_AgroRange && m_Targeting) { m_Targeting = false; return false; }
-            //if is in range witch direction
-            m_TargetDirection = new Vector2(creatureCenter.X - myCenter.X, creatureCenter.Y - myCenter.Y);
-            //if is in range?
-            if (distance <= m_TargetingRange) m_Targeting = true;
+            float wMargin = m_ColisionRect.Width / 100 * 30;
+            float hMargin = (m_ColisionRect.Height - m_ColisionRect.Height * 1.5f);
 
-            if (!m_Attack && distance <= m_AttackRange) m_Attack = true;
-            //IF IN ATACKRECT THEN TRUE CHANGE LATER
-            if (m_Attack && m_AttackIsLethal)
-            {
-                if (Colision.RectInRect(m_AttackRect,creature.GetRect()))
-                {
-                    m_AtackHit = true;
-                    return true;
-                }
-            }
+            float x = m_ColisionRect.Width / 2 - wMargin;
+            float y = -m_ColisionRect.Height / 2 + hMargin;
+            float w = m_ColisionRect.Width / 2 + wMargin;
+            float h = m_ColisionRect.Height - hMargin;
 
-            return false;
-        }
-        private bool HandelTargeting()
-        {
-            if (!m_Targeting) return m_Targeting;
-            //if target right
-            if(m_TargetDirection.X > 0)
-            {
-                if (m_Speed < 0) m_Speed = -m_Speed;
-                m_LookRight = true;
-            }
-            //if target left
-            else if (m_TargetDirection.X < 0)
-            {
-                if (m_Speed > 0) m_Speed = -m_Speed;
-                m_LookRight = false;
-            }
-            return m_Targeting;
-        }
-        RectangleF m_AttackRect = new RectangleF(0,0,0,0);
-        private bool HandelAttack()
-        {
-            if (!m_Attack) return m_Attack;
-            float wMargin = m_ColisionRect.Width / 100 * 20;
-            RectangleF atackSize = new RectangleF(
-                0, 0, m_ColisionRect.Width/2 + wMargin, m_ColisionRect.Height *1.5f);
-            
-            // Attack to the right
-            if (m_TargetDirection.X < 0)
-            {
-                m_AttackRect.X = m_ColisionRect.X - atackSize.Width + wMargin;
-                m_AttackRect.Y = m_ColisionRect.Y + (m_ColisionRect.Height - atackSize.Height);
-                m_AttackRect.Width = atackSize.Width;
-                m_AttackRect.Height = atackSize.Height;
-            }
-            // Attack to the left
-            if (m_TargetDirection.X > 0)
-            {
-                m_AttackRect.X = m_ColisionRect.X + m_ColisionRect.Width - wMargin;
-                m_AttackRect.Y = m_ColisionRect.Y + (m_ColisionRect.Height - atackSize.Height);
-                m_AttackRect.Width = atackSize.Width;
-                m_AttackRect.Height = atackSize.Height;
-            }
+            RectangleF attackRect = new RectangleF(x, y, w, h);
 
-            return m_Attack;
-        }
-        MyTimer m_AttackStartTimer;
-        MyTimer m_AttackTimer;
-        float m_AttackStartDuration;
-        float m_AttackDuration;
-        bool m_AttackIsLethal;
-        bool m_AtackHit;
-        private bool Attack(float elapsedSec)
-        {
-            if (!m_Attack) return m_Attack;
-            if (m_AttackStartTimer.IsRun(elapsedSec)) return m_AttackIsLethal;
-            
-            if (m_AtackHit) m_AttackIsLethal = false;
-            else m_AttackIsLethal = true;
-
-            if (m_AttackTimer.IsRun(elapsedSec)) return m_AttackIsLethal;
-
-            m_AttackIsLethal = false;
-            m_AttackStartTimer.Reset();
-            m_AttackTimer.Reset();
-            m_Attack = false;
-            m_AtackHit = false;
-            return m_AttackIsLethal;
+            return attackRect;
         }
         //UPDATES
         public override void Update(float elapsedSec)
         {
             float agroBoost = 1;
-            if (HandelTargeting())
+            if (base.HandelTargeting())
             {
                 agroBoost = 2;
-                if (HandelAttack())
+                if (base.HandelAttack(GetAttackRect(), m_MyCenter))
                 {
                     agroBoost = 0;
-                    if (Attack(elapsedSec))
-                    {
-                        
-                    }
+                    base.Attack(elapsedSec);
                 }
             }
 
-
             StayOnPlatform(m_Vertexs, elapsedSec);
             if (m_Waking) m_Velocity.X += m_Speed * elapsedSec * agroBoost;
-            
+            else m_Velocity.X = 0;
             m_Velocity.X = base.SpeedLimit(m_Velocity.X, m_MaxSpeed * agroBoost);
             UpdateTexture(elapsedSec, 0.2f);
 
