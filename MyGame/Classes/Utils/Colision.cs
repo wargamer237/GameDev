@@ -49,10 +49,9 @@ namespace MyUtils
         }
         public static bool PointInRect(Vector2 point, RectangleF border)
         {
-            bool checkX = point.X >= border.X && point.X <= border.X + (border.Width);
-            bool checkY = point.Y >= border.Y && point.Y <= border.Y + (border.Height);
-            if (checkX && checkY) return true;
-            return false;
+            bool checkX = point.X >= border.X && point.X <= border.X + border.Width;
+            bool checkY = point.Y >= border.Y && point.Y <= border.Y + border.Height;
+            return checkX && checkY;
         }
         //COLISION WITH RECTANGLES
         public static bool RectInRectWithSide(RectangleF rect1, RectangleF rect2, ref bool left, ref bool right, ref bool top, ref bool bottom)

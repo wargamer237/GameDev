@@ -23,12 +23,17 @@ namespace MyUtils
         }
         private void Start()
         {
+            if (m_DurationSec < 0) return;
             m_TimerIsRunning = true;
             m_CurantTime = 0;
         }
         public void Reset()
         {
             Start();
+        }
+        public bool IsRun()
+        {
+            return m_TimerIsRunning;
         }
         public bool IsRun(float elapsedSec)
         {

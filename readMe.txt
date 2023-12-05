@@ -17,3 +17,5 @@ And change the set up of using player. Player is now a 'Creature' and he is in t
 6) 20/11 Fix 98% of coliosn isues and fix up Creature class. 
 7) 27/11 Added a enemy(rotot) and a attack to the enemy. (but gone be replaced with AttackCreature and become a child of that)
 8) 27/11 Player has attacks + video in videoCurantState(change per video)
+8) 05/12 Added Spikes as a enemy. stabs the player and has coldown when it stables.🔪🔪🔪🔪
+And fix weard isues with colision.RectInRect(r1,r2);

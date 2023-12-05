@@ -10,15 +10,15 @@ namespace MyUtils
 {
     internal interface HasAnimations <animation>
     {
+        private void IntelizeAnimations(int maxWidth, int maxHeight)
+        {
+
+        }
         private void TextureUpdate(float elapsedSec, float animationDuration)
         {
 
         }
         private void SetAnimation(animation movment)
-        {
-
-        }
-        private void SetAnimationTextures(int x, int y)
         {
 
         }

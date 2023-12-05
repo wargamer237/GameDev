@@ -7,6 +7,7 @@ namespace MyUtils
     {
         public static Texture2D GetTexture(string path, SpriteBatch graph)
         {
+            //if (string.IsNullOrEmpty(path)) return null;
             /*if(!File.Exists(path)) return null;*/
             var stream = TitleContainer.OpenStream($"{path}");
             Texture2D texture = Texture2D.FromStream(graph.GraphicsDevice, stream);

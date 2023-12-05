@@ -41,7 +41,7 @@ namespace MyUtils
         public void AddRow(int animationCount)
         {
             animationCount--;
-            if(m_RowsTexture.Count > 0 && m_CurantRow > 0 && m_CurantRow < m_RowsTexture.Count)
+            if(m_RowsTexture.Count > 0 && m_CurantRow >= 0 && m_CurantRow < m_RowsTexture.Count)
             {
                 if (m_RowsTexture[m_CurantRow] <= 0)
                 {
@@ -79,6 +79,7 @@ namespace MyUtils
             //ROWS
             m_CurantTime = 0;
             m_CurantRow = row;
+            if (m_CurantRow >= m_RowsTexture.Count) return;
             //COLUM
             //if to low Value
             //then closests to the boundery [min = 0][max = MaxAnimations]
