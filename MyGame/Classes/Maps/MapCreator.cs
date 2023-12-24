@@ -125,9 +125,6 @@ namespace MyMap
             Block block = new Block(rect);
             switch (type)
             {
-                case (int)BlockType.BackGround:
-                    block = new BackGround(rect, tileType);
-                    break;
                 case (int)BlockType.Ground:
                     block = new Ground(rect, tileType);
                     break;

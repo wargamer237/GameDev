@@ -1,5 +1,4 @@
-﻿using MyUtils;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MyUtils
 {
@@ -46,6 +45,12 @@ namespace MyUtils
             if (PointInRect(new Vector2(rect1.X + rect1.Width, rect1.Y + rect1.Height), rect2)) return true;
 
             return false;
+        }
+        public static bool PointInRect(PointF point, RectangleF border)
+        {
+            bool checkX = point.X >= border.X && point.X <= border.X + border.Width;
+            bool checkY = point.Y >= border.Y && point.Y <= border.Y + border.Height;
+            return checkX && checkY;
         }
         public static bool PointInRect(Vector2 point, RectangleF border)
         {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using MyHandelers;
 using MyCreature;
+using MyBlocks;
 namespace MyGame
 {
     internal class Main
@@ -13,17 +14,25 @@ namespace MyGame
         MapHandeler m_MapHandeler;
         CreatureManger m_CreatureManger;
         PointF m_CampPoint;
+        BackGround m_Backgroun;
         public void Initialize()
         {
+
             m_MapHandeler = new MapHandeler();
             Map map = new Map();
+            float w = map.GridLayout.BlockSize * map.GridLayout.XBlock * map.GridLayout.XChunck;
+            float h = map.GridLayout.BlockSize * map.GridLayout.YBlock * map.GridLayout.YChunck;
+            m_Backgroun = new BackGround(new RectangleF(0,0, map.GridLayout.BlockSize, map.GridLayout.BlockSize)
+                ,new RectangleF(0,0,w,h));
             m_CreatureManger = new CreatureManger();
             m_MapHandeler.SetMap(map.IntedMap, map.GridLayout);
         }
         public void Draw()
         {
             UtilsStatic.NewPush();
+           
             UtilsStatic.PushTranslate(-m_CampPoint.X + UtilsStatic.ScreenSize.Width/2, -m_CampPoint.Y + UtilsStatic.ScreenSize.Height / 2);
+            m_Backgroun.DrawBackground();
             m_MapHandeler.DrawMap();
             m_CreatureManger.Draw();
             UtilsStatic.ResetColor();

@@ -11,6 +11,7 @@ namespace MyBlocks
         {
             this.IsBlock(false);
         }
+        RectangleF m_MapSize;
         public Ground(RectangleF rect, int tileType) 
             : base(rect)
         {

@@ -414,5 +414,20 @@ namespace MyUtils//DrawingClasses
         {
             return point.X >= rect.X && point.X <= (rect.X + rect.Width) && point.Y >= rect.Y && point.Y <= (rect.Y + rect.Height);
         }
+        public static Vector2 GetDirection(PointF p1, PointF p2)
+        {
+            return GetDirection(p1.X, p1.Y, p2.X, p2.Y);
+        }
+        public static Vector2 GetDirection(Vector2 p1, Vector2 p2)
+        {
+            return GetDirection(p1.X, p1.Y, p2.X, p2.Y);
+        }
+        public static Vector2 GetDirection(float x1, float y1, float x2, float y2)
+        {
+            float vx = x2 - x1;
+            float vy = y2 - y1;
+
+            return new Vector2(vx, vy);
+        }
     }
 }

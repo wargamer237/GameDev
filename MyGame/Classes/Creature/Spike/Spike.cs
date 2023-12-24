@@ -130,8 +130,6 @@ namespace MyCreature
         }
         private void SetAnimation(CurantMovment movment)
         {
-            //beacuse animation handeler is with index of then animation
-            //cant add same index :.(
             switch (movment)
             {
                 case CurantMovment.Wait:

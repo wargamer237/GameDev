@@ -172,7 +172,6 @@ namespace MyCreature
                     m_Attack = true;
                     break;
             }
-
             return attackRect;
         }
         private void AttackRectUpdate(float elapsedSec)
@@ -219,7 +218,7 @@ namespace MyCreature
             UpdateColision(ref m_DrawRect);
             UpdateRects(elapsedSec);
             //TEXTURE UPDATE ANIMATIONS
-            UpdateTexture(elapsedSec, 0.18f);
+            UpdateTexture(elapsedSec, 2 * elapsedSec * 8);
         }
         /// <summary>
         /// Its working!!. it check colison of the vertics and 

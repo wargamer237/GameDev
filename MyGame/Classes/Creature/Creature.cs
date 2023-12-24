@@ -186,7 +186,7 @@ namespace MyCreature
             if (m_Dead) return;
             //Gravity standard
             m_Velocity.Y += m_Gravity * elapsedSec;
-            m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_Gravity);
+            m_Velocity.Y = SpeedLimit(m_Velocity.Y, MathF.Abs(m_Gravity));
             
             //Check colisions
             UpdateColision(ref m_DrawRect);

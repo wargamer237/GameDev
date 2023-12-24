@@ -131,7 +131,7 @@ namespace MyCreature
             if (m_Waking) m_Velocity.X += m_Speed * elapsedSec * agroBoost;
             else m_Velocity.X = 0;
             m_Velocity.X = base.SpeedLimit(m_Velocity.X, m_MaxSpeed * agroBoost);
-            UpdateTexture(elapsedSec, 0.2f);
+            UpdateTexture(elapsedSec, 2 * elapsedSec * 10);
 
             base.Update(elapsedSec);
         }

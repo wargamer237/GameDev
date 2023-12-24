@@ -17,30 +17,42 @@ namespace MyCreature
             m_Player = new Player(new RectangleF(100, 200, 100, 100));
             m_FocuedTarget = m_Player;
             m_Creatures = new List<Creature>{ m_Player };
-            m_Creatures.Add(new Robot(new RectangleF(170, -200, 100, 100)));
-            m_Creatures.Add(new Player  (new RectangleF(190, -200, 100, 100)));
-            m_Creatures.Add(new Spike(new RectangleF(100,200,100,100)));
+            m_Creatures.Add(new Robot(new RectangleF(170, 400, 250, 250)));
+            m_Creatures.Add(new Player(new RectangleF(190, -200, 100, 100)));
+            m_Creatures.Add(new Spike(new RectangleF(400,800,100,100)));
+            m_Creatures.Add(new Spike(new RectangleF(500,800,100,100)));
+            m_Creatures.Add(new Spike(new RectangleF(600,800,100,100)));
+            m_Creatures.Add(new Spike(new RectangleF(700,800,100,100)));
+            m_Creatures.Add(new Spike(new RectangleF(800,800,100,100)));
+            m_Creatures.Add(new Spike(new RectangleF(900,800,100,100)));
+            m_Creatures.Add(new Bird(new RectangleF(200,200,100,100)));
         }
         public void Draw()
         {
-            m_Player.Draw();
-            for (int i = m_Creatures.Count -1; i >= 0; i--)
+            DrawCreatures<Spike>();
+            DrawCreatures<Bird>();
+            DrawCreatures<Robot>();
+            DrawCreatures<Player>();
+        }
+        void DrawCreatures<T>() where T : Creature
+        {
+            foreach (Creature creature in m_Creatures)
             {
-                if(m_Creatures[i] is AttackCreature r)
+                if (creature is T tCreature)
                 {
-                    r.DebugDraw();
+                    if (tCreature is AttackCreature attack)
+                    {
+                        attack.DebugDraw();
+                    }
+                    tCreature.Draw();
+
                 }
-                if(m_Creatures[i] is Spike s)
-                {
-                    s.Draw();
-                }
-                m_Creatures[i].Draw();
             }
         }
         public void Update(float elapsedSec)
         {
             PlayerUpdate(ref m_Player, elapsedSec);
-            bool playerAttacking = m_Player.IsLeathalAttack();
+
             for (int i = 0; i < m_Creatures.Count; i++)
             {
                 Creature creature = m_Creatures[i];

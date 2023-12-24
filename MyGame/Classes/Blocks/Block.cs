@@ -9,7 +9,6 @@ namespace MyBlocks
         Nothing = 0,
         Ground = 1,
         Platform = 2,
-        BackGround = 3,
     }
     public enum TileType
     {
@@ -31,6 +30,8 @@ namespace MyBlocks
         protected string m_Tile;
         protected Rectangle m_SrtRect;
         protected bool m_IsBlock;
+
+
         public Block()
         {
         }
