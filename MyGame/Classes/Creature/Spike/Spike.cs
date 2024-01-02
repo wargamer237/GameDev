@@ -155,7 +155,7 @@ namespace MyCreature
         {
             float marginH = drawRect.Height / 100 *40;
             float width = drawRect.Width / 1f;
-            float height = drawRect.Height / 1f;
+            float height = drawRect.Height / 1.2f;
 
             m_ColisionRect.X = drawRect.X;
             m_ColisionRect.Y = drawRect.Y + (drawRect.Height - height) - marginH;

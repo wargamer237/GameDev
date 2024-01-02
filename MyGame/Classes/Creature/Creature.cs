@@ -9,6 +9,14 @@ using System.Threading.Tasks;
 
 namespace MyCreature
 {
+    public enum Creatures
+    {
+        Player = 6,
+        Robot = 7,
+        Bird = 8,
+        Spike = 9,
+        Goal = 10
+    }
     internal class Creature
     {
         //location
@@ -215,9 +223,10 @@ namespace MyCreature
                 {
                     if (horizontalDepth < vertex.Depth) horizontalDepth = vertex.Depth;
 
-
+                    //LEFT
                     if (direction.X > 0)
                     {
+
                         if (m_ExternVelocity.X < 0)
                         {
                             if (m_Velocity.X > 0)
@@ -250,9 +259,8 @@ namespace MyCreature
                         }
 
                     }
-                    else // left side: so move last bit to left
+                    else // right side: so move last bit to left
                     {
-                        horizontalDepth = -horizontalDepth;
                         if (m_ExternVelocity.X > 0)
                         {
                             if (m_Velocity.X < 0)
@@ -260,9 +268,7 @@ namespace MyCreature
                                 m_Velocity.X = 0;
                                 horizontalDepth = 0;
                             }
-                            m_ExternVelocity.X -= horizontalDepth;
-
-
+                            m_ExternVelocity.X += horizontalDepth;
                             continue;
                         }
                         else if (m_ExternVelocity.X < 0)
@@ -271,19 +277,20 @@ namespace MyCreature
                             horizontalDepth = 0;
                             continue;
                         }
+                        // left side: so move last bit to left
                         if (m_Velocity.X < 0)
                         {
-                            m_Velocity.X = horizontalDepth;
+                            m_Velocity.X = -horizontalDepth;
                         }
                         else if (m_ExternVelocity.X < 0)
                         {
-                            m_ExternVelocity.X = horizontalDepth;
+                            m_ExternVelocity.X = -horizontalDepth;
                         }
                         else
                         {
-                            m_ExternVelocity.X = horizontalDepth;
                             horizontalDepth = 0;
                         }
+
                     }
                 }
                 else // Vertexal Vertex

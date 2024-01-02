@@ -12,21 +12,15 @@ namespace MyCreature
         Player m_Player;
         Creature m_FocuedTarget;
         List<Creature> m_Creatures;
+        bool m_PlayerDied;
+        bool m_PlayerWin;
         public CreatureManger()
         {
-            m_Player = new Player(new RectangleF(100, 200, 100, 100));
+            m_Player = new Player(new RectangleF(1100, 200, 100, 100));
             m_FocuedTarget = m_Player;
             m_Creatures = new List<Creature>{ m_Player };
-            m_Creatures.Add(new Robot(new RectangleF(170, 400, 250, 250)));
-            m_Creatures.Add(new Player(new RectangleF(190, -200, 100, 100)));
-            m_Creatures.Add(new Spike(new RectangleF(400,800,100,100)));
-            m_Creatures.Add(new Spike(new RectangleF(500,800,100,100)));
-            m_Creatures.Add(new Spike(new RectangleF(600,800,100,100)));
-            m_Creatures.Add(new Spike(new RectangleF(700,800,100,100)));
-            m_Creatures.Add(new Spike(new RectangleF(800,800,100,100)));
-            m_Creatures.Add(new Spike(new RectangleF(900,800,100,100)));
-            m_Creatures.Add(new Bird(new RectangleF(200,200,100,100)));
         }
+
         public void Draw()
         {
             DrawCreatures<Spike>();
@@ -40,14 +34,15 @@ namespace MyCreature
             {
                 if (creature is T tCreature)
                 {
+                    if (creature is Player) continue;
                     if (tCreature is AttackCreature attack)
                     {
-                        attack.DebugDraw();
+                       // attack.DebugDraw();
                     }
                     tCreature.Draw();
-
                 }
             }
+            m_Player.Draw();
         }
         public void Update(float elapsedSec)
         {
@@ -58,13 +53,22 @@ namespace MyCreature
                 Creature creature = m_Creatures[i];
                 creature = BlocksIntreactions(creature);
 
-                if (creature == m_Player) continue;
+                if (creature is Player) continue;
                 creature.Update(elapsedSec);
                 if (creature is AttackCreature imAttacker)
                 {
                     m_Player.SetHit(imAttacker.GetAttack(m_Player));
-
                 }
+
+                if(creature is Goal goal)
+                {
+                    if (Colision.RectInRect(goal.GetRect(), m_Player.GetRect()))
+                    {
+                        m_PlayerWin = true;
+                        m_Player = new Player();
+                    }
+                }
+
                 PlayerAttacks(ref creature);
                 m_Creatures[i] = creature;
                 CreatureDeaths(creature);
@@ -80,9 +84,6 @@ namespace MyCreature
             bool Dead = creature.GetDeathState();
             if (!Dead) return;
             m_Creatures.Remove(creature);
-            creature = new Robot(new RectangleF(190, 0, 100, 100));
-            m_Creatures.Add(creature);
-
         }
         public void PlayerUpdate(ref Player player, float elapsedSec)
         {
@@ -91,9 +92,7 @@ namespace MyCreature
             if (Dead)
             {
                 m_Creatures.Remove(player);
-                player = new Player(new RectangleF(0, 0, 100, 100));
-                m_Creatures.Add(player);
-                m_FocuedTarget = player;
+                m_PlayerDied = true;
             }
         }
         public Creature BlocksIntreactions(Creature creature)
@@ -110,6 +109,14 @@ namespace MyCreature
             }
             return creature;
         }
+        public bool WonGame()
+        {
+            return m_PlayerWin;
+        }
+        public bool LostGame()
+        {
+            return m_PlayerDied;
+        }
         public PointF GetCameraTranslation()
         {
             RectangleF r = m_FocuedTarget.GetRect();
@@ -122,6 +129,19 @@ namespace MyCreature
         public void SetCreatures(List<Creature> c)
         {
             m_Creatures = c;
+        }
+        public void IntelizeCreatures(List<Creature> c)
+        {
+            m_Creatures = c;
+            foreach (Creature creature in m_Creatures)
+            {
+                if (creature is Player p)
+                {
+                    m_Player = p;
+                    m_FocuedTarget = m_Player;
+                    return;
+                }
+            }
         }
     }
 }

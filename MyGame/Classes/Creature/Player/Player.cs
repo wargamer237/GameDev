@@ -48,7 +48,7 @@ namespace MyCreature
             m_Speed = 400;
             m_Resistents = m_Speed / 100 * 50;
             m_MaxSpeed = m_Speed * 1f;
-            m_Gravity = 800;
+            m_Gravity = 500;
             m_JumpingHeight = 22;
             // down right test
             m_StartPosition = new PointF(200, -300);
@@ -214,6 +214,7 @@ namespace MyCreature
             m_Velocity.X = SpeedLimit(m_Velocity.X, m_MaxSpeed, m_Direction.X);
             m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_Gravity);
             m_Velocity.X += m_AttackVelocity.X;
+            if (m_Dead) m_Velocity = Vector2.Zero;
             //CHECK COLISIONS (Creature standard)
             UpdateColision(ref m_DrawRect);
             UpdateRects(elapsedSec);

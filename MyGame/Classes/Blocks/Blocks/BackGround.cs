@@ -24,8 +24,10 @@ namespace MyBlocks
         public BackGround(RectangleF rect, RectangleF mapSize)
            : base(rect)
         {
+            m_MapSize = mapSize;
+
             this.IsBlock(true);
-            this.SetColor(Color.White);
+            this.SetColor(Color.HotPink);
             this.SetTexture($"Textures/Tiles/Background/{5}tile.png"); //bv
             this.SetSourceRect(new Rectangle());
         }

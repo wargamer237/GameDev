@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using MyHandelers;
 using MyCreature;
-using MyBlocks;
+using MyMenu;
+using System;
 namespace MyGame
 {
     internal class Main
@@ -14,25 +15,20 @@ namespace MyGame
         MapHandeler m_MapHandeler;
         CreatureManger m_CreatureManger;
         PointF m_CampPoint;
-        BackGround m_Backgroun;
+        MainMenu m_MainMenu;
         public void Initialize()
         {
-
+            m_MainMenu = new MainMenu(UtilsStatic.ScreenSize);
             m_MapHandeler = new MapHandeler();
-            Map map = new Map();
-            float w = map.GridLayout.BlockSize * map.GridLayout.XBlock * map.GridLayout.XChunck;
-            float h = map.GridLayout.BlockSize * map.GridLayout.YBlock * map.GridLayout.YChunck;
-            m_Backgroun = new BackGround(new RectangleF(0,0, map.GridLayout.BlockSize, map.GridLayout.BlockSize)
-                ,new RectangleF(0,0,w,h));
             m_CreatureManger = new CreatureManger();
-            m_MapHandeler.SetMap(map.IntedMap, map.GridLayout);
         }
         public void Draw()
         {
+            m_MainMenu.Draw();
+            if (m_MainMenu.GetVisibleState()) return;
             UtilsStatic.NewPush();
            
             UtilsStatic.PushTranslate(-m_CampPoint.X + UtilsStatic.ScreenSize.Width/2, -m_CampPoint.Y + UtilsStatic.ScreenSize.Height / 2);
-            m_Backgroun.DrawBackground();
             m_MapHandeler.DrawMap();
             m_CreatureManger.Draw();
             UtilsStatic.ResetColor();
@@ -41,7 +37,21 @@ namespace MyGame
         public void Update(float elapsedSec)
         {
             CheckKeyboardInput(elapsedSec);
-
+            if (m_MainMenu.GetVisibleState())
+            {
+                int indexMap = m_MainMenu.Update();
+                if (indexMap < 0) return;
+                Map map = new Map((MapTypes)indexMap);
+                m_CreatureManger = new CreatureManger();
+                m_MapHandeler.SetMap(map.IntedMap, map.GridLayout);
+                m_CreatureManger.IntelizeCreatures(m_MapHandeler.GetCreatures());
+               
+                m_MainMenu.SetVisibiltyMenu(false);
+            }
+            if (m_CreatureManger.WonGame())
+            {
+                m_MainMenu.SetVisibiltyMenu(true);
+            }
             Vector2 externVelocty = new Vector2();
             m_MapHandeler.Update(elapsedSec);
 

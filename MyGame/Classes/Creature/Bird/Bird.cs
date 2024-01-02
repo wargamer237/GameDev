@@ -108,6 +108,7 @@ namespace MyCreature
                     base.Attack(elapsedSec);
                 } 
             }
+           
             m_AttackCd.IsRun(elapsedSec);
             m_Velocity.X += m_Speed * elapsedSec;
             m_Velocity.X = base.SpeedLimit(m_Velocity.X, m_MaxSpeed * agroBoost);
@@ -116,9 +117,9 @@ namespace MyCreature
             //Gravity standard
             m_Velocity.Y += m_Gravity * elapsedSec;
             m_Velocity.Y = SpeedLimit(m_Velocity.Y, m_MaxSpeed);
-
+            if (m_Targeting == false) m_Velocity = Vector2.Zero;
             //Check colisions
-           // UpdateColision(ref m_DrawRect);
+            // UpdateColision(ref m_DrawRect);
             UpdateRects(elapsedSec);
             TextureUpdate(elapsedSec, 2 * elapsedSec * 5);
             m_Gravity = 0;

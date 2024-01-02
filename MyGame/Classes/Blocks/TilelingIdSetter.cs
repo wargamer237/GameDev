@@ -10,6 +10,7 @@ namespace MyBlocks
     {
         public static int GetTileId(int[][] array, int row, int colum,int itemId)
         {
+
             return SetTileType(GetCrossBlocks(array, row, colum), GetCornersBlocks(array, row, colum), itemId);
         }
         private static int SetTileType(int[] arrayAround, int[] arrayCorners, int itemId)

@@ -97,6 +97,7 @@ namespace MyUtils//DrawingClasses
             m_ScreenOnlyDraw = false;
             PopMatrix();
         }
+
         public static void SetScreen(GraphicsDeviceManager intelize, SpriteBatch graph)
         {
             m_Graph = graph;

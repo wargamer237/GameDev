@@ -1,7 +1,7 @@
 ﻿using MyUtils;
 using MyBlocks;
 using System.Collections.Generic;
-
+using MyCreature;
 namespace MyMap
 {
     public struct Grid
@@ -17,8 +17,10 @@ namespace MyMap
     {
         //LISTS
         Block[][][] m_MapBlocks;
+        List<Creature> m_Creatures;
         public MapCreator(int[][][] intedMap, Grid gridLayout)
         {
+            m_Creatures = new List<Creature>();
             GenrateMap(intedMap, gridLayout);
         }
         public MapCreator()
@@ -44,6 +46,10 @@ namespace MyMap
                 }
             }
             return listBlocks;
+        }
+        public List<Creature> GetListCreatures()
+        {
+            return m_Creatures;
         }
         //START
         public void GenrateMap(int[][][] intedMap, Grid gridLayout)
@@ -130,11 +136,38 @@ namespace MyMap
                     break;
                 case (int)BlockType.Platform:
                     Platform p = new Platform(rect, tileType);
-                    p.SetPath(new PointF(0, 0), new PointF(3, 0), 2);
+                    p.SetPath(new PointF(0, 0), new PointF(5, 0), 2);
                     block = p;
+                    break;
+                default:
+                    AddCreature(rect, type);
                     break;
             }
             return block;
+        }
+        private void AddCreature(RectangleF rect, int type)
+        {
+            if (m_Creatures == null) m_Creatures = new List<Creature>();
+            switch (type)
+            {
+                case (int)Creatures.Player:
+                    m_Creatures.Add(new Player(rect));
+                    break;
+                case (int)Creatures.Robot:
+                    m_Creatures.Add(new Robot(new RectangleF(rect.X, rect.Y - 145, 150, 150)));
+                    break;
+                case (int)Creatures.Bird:
+                    m_Creatures.Add(new Bird(rect));
+                    break;
+                case (int)Creatures.Spike:
+                    m_Creatures.Add(new Spike(new RectangleF(rect.X, rect.Y + rect.Height/100*40, rect.Width, rect.Height)));
+                    break;
+                case (int)Creatures.Goal:
+                    m_Creatures.Add(new Goal(rect));
+                    break;
+                default:
+                    break;
+            }
         }
         private Block[][][] CreatGridInArray(Grid gridLayout)
         {
