@@ -7,6 +7,10 @@ namespace MyClass.MyUtils
     {
         public static Texture2D GetTexture(string path, SpriteBatch graph)
         {
+            // you can trun this on but I let this off so you can track where the problmes happens.
+            // bv: texture is invisable. 
+            // a) your source rect is to small and shows only transparant part.
+            // b) you had rong path to file.
             //if (string.IsNullOrEmpty(path)) return null;
             /*if(!File.Exists(path)) return null;*/
             var stream = TitleContainer.OpenStream($"{path}");

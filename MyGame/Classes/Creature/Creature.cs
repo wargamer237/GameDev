@@ -156,6 +156,7 @@ namespace MyCreature
                 directions = SpriteEffects.FlipHorizontally;
             UtilsStatic.NewPush();
             UtilsStatic.PushTranslate(m_DrawRect.X - m_DrawRect.Width / 2, m_DrawRect.Y - m_DrawRect.Height / 2);
+            
             /* DEBUG /
             UtilsStatic.SetColor(Color.Red);
             UtilsStatic.DrawRect(new RectangleF(m_DrawRect.Width / 2, m_DrawRect.Height / 2, m_DrawRect.Width, m_DrawRect.Height));          
@@ -167,12 +168,12 @@ namespace MyCreature
             UtilsStatic.PopMatrix();
 
             //DEBUG VERTIX
-            foreach (RectangleF item in m_VerticxDebugRects)
+            /*foreach (RectangleF item in m_VerticxDebugRects)
             {
                 UtilsStatic.SetColor(Color.Yellow);
                 UtilsStatic.DrawRect(item);
                 UtilsStatic.ResetColor();
-            }
+            }*/
         }
         //MACANICS
         protected float SpeedLimit(float velocity, float limit, float directionSpeed = 0)

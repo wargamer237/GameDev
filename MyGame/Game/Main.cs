@@ -2,9 +2,9 @@
 using MyClass.MyUtils;
 using MyClass.MyMap;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Input;
 using MyCreature;
 using MyMenu;
+//DIT PROJECT IS GEMAAT DOOR: BART BRITS : 2ITSOF3 : s142840 :student van AP-Hogeschool
 namespace MyGame
 {
     internal class Main

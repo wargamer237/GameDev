@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using MyClass.MyUtils;
-using System.IO;
+//DIT PROJECT IS GEMAAT DOOR: BART BRITS : 2ITSOF3 : s142840 :student van AP-Hogeschool
 namespace MyGame
 {
     public class Game1 : Game
@@ -31,7 +31,7 @@ namespace MyGame
 
             UtilsStatic.SetScreen(m_Intelize, m_Graph);
             //conecting screen with drawing functions
-            UtilsStatic.SetScreenSize(1800, 900);
+            UtilsStatic.SetScreenSize(1200, 900);
             m_Main.Initialize();
         }
 

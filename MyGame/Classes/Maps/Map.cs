@@ -496,7 +496,7 @@ namespace MyClass.MyMap
             };
             mapList.Add(chunck);
             chunck = new int[][]{
-                new int[] { 0, 0, 0, 0, 8 },
+                new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 0, 9, 9, 9, 9 },
@@ -507,14 +507,14 @@ namespace MyClass.MyMap
             chunck = new int[][]{
                 new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 0, 0, 0, 0, 0 },
-                new int[] { 0, 0, 7, 0, 0 },
-                new int[] { 0, 0, 2, 0, 2 },
+                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 7, 0, 2, 0, 2 },
                 new int[] { 1, 1, 1, 1, 1 }
             };
             mapList.Add(chunck);
             chunck = new int[][]{
                 new int[] { 0, 0, 0, 0, 1 },
-                new int[] { 0, 0, 0, 0, 1 },
+                new int[] { 0, 0, 0, 8, 1 },
                 new int[] { 2, 2, 2, 2, 0 },
                 new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 1, 1, 1, 1, 0 }
@@ -522,7 +522,7 @@ namespace MyClass.MyMap
             mapList.Add(chunck);
             chunck = new int[][]{
                 new int[] { 0, 0, 0, 0, 1 },
-                new int[] { 0, 6, 0, 0, 1 },
+                new int[] { 0, 0, 0, 0, 1 },
                 new int[] { 2, 2, 2, 2, 0 },
                 new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 2, 2, 2, 0, 0 }
@@ -592,7 +592,7 @@ namespace MyClass.MyMap
             int[][] chunck = {
                 new int[] { 0, 0, 0, 0, 0 },
                 new int[] { 0, 0, 0, 0, 0 },
-                new int[] { 0, 0, 0, 0, 0 },
+                new int[] { 0, 6, 6, 0, 0 },
                 new int[] { 0, 1, 0, 1, 0 },
                 new int[] { 1, 1, 0, 1, 1 }
             };

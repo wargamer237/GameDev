@@ -33,10 +33,10 @@ namespace MyCreature
                 if (creature is T tCreature)
                 {
                     if (creature is Player) continue;
-                    if (tCreature is AttackCreature attack)
+                    /* if (tCreature is AttackCreature attack)
                     {
                        attack.DebugDraw();
-                    }
+                    }*/
                     tCreature.Draw();
                 }
                 if (creature is Goal g)
