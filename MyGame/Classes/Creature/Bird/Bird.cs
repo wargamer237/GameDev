@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using MyUtils;
+using MyClass.MyUtils;
+using MyClass.MyInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace MyCreature
         {
             m_TexturePath = "Textures/Creatures/Bird/Bird.png";
             m_VerticxDebugRects = new List<RectangleF>();
-            m_Speed = 400;
+            m_Speed = 300;
             m_Resistents = m_Speed / 100 * 50;
             m_MaxSpeed = m_Speed * 0.6f;
             m_Gravity = 0;
@@ -36,9 +37,9 @@ namespace MyCreature
             m_AttackStartTimer = new MyTimer(m_AttackStartDuration);
             m_AttackTimer = new MyTimer(m_AttackDuration);
             m_AttackCd = new MyTimer(3);
-            //agro 
-            m_AgroRange = 10000;
-            m_TargetingRange = 1000;
+            //agro
+            m_AgroRange = 2000;
+            m_TargetingRange = 900;
             m_AttackRange = 0;
             //m_CooldownTimer = new MyTimer(3);
             //animation

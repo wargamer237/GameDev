@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MyUtils;
-using MyBlocks;
+using MyClass.MyUtils;
 using MyPlayer;
-using System.Numerics;
+using Microsoft.Xna.Framework.Audio;
+using MyClass.MyBlocks.BlocksInterfaces;
 namespace MyCreature
 {
     internal class CreatureManger
@@ -16,9 +16,7 @@ namespace MyCreature
         bool m_PlayerWin;
         public CreatureManger()
         {
-            m_Player = new Player(new RectangleF(1100, 200, 100, 100));
-            m_FocuedTarget = m_Player;
-            m_Creatures = new List<Creature>{ m_Player };
+            SetSound();
         }
 
         public void Draw()
@@ -37,9 +35,13 @@ namespace MyCreature
                     if (creature is Player) continue;
                     if (tCreature is AttackCreature attack)
                     {
-                       // attack.DebugDraw();
+                       attack.DebugDraw();
                     }
                     tCreature.Draw();
+                }
+                if (creature is Goal g)
+                {
+                    g.Draw();
                 }
             }
             m_Player.Draw();
@@ -66,12 +68,22 @@ namespace MyCreature
                     {
                         m_PlayerWin = true;
                         m_Player = new Player();
+                        m_SoundEffect.Play();
                     }
                 }
 
                 PlayerAttacks(ref creature);
                 m_Creatures[i] = creature;
                 CreatureDeaths(creature);
+            }
+        }
+        SoundEffect m_SoundEffect;
+        private void SetSound()
+        {
+            using (var stream = TitleContainer.OpenStream("Textures/Sound/win.wav"))
+            {
+                // Load the sound effect from the stream
+                m_SoundEffect = SoundEffect.FromStream(stream);
             }
         }
         public void PlayerAttacks(ref Creature creature)

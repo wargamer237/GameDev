@@ -1,9 +1,9 @@
-﻿using MyBlocks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using MyClass.MyBlocks;
 
-namespace MyUtils
+namespace MyClass.MyUtils
 {
     public struct Vertexs
     {

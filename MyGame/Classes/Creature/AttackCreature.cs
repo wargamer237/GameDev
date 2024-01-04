@@ -1,4 +1,4 @@
-﻿using MyUtils;
+﻿using MyClass.MyUtils;
 using System;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;

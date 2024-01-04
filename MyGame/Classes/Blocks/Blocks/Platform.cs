@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using MyUtils;
+using MyClass.MyUtils;
+using MyClass.MyBlocks.BlocksInterfaces;
 
-namespace MyBlocks
+namespace MyClass.MyBlocks.Blocks
 {
     internal class Platform : Block, ICollidable, IMovable
     {

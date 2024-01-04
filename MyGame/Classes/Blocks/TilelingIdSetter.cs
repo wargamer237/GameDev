@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBlocks
+namespace MyClass.MyBlocks
 {
     internal static class Tileling
     {

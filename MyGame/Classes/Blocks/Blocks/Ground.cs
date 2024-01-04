@@ -1,8 +1,8 @@
-﻿using MyBlocks;
-using Microsoft.Xna.Framework;
-using MyUtils;
+﻿using Microsoft.Xna.Framework;
+using MyClass.MyUtils;
+using MyClass.MyBlocks.BlocksInterfaces;
 
-namespace MyBlocks
+namespace MyClass.MyBlocks.Blocks
 {
     internal class Ground : Block, ICollidable
     {

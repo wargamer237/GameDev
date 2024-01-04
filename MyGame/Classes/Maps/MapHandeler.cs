@@ -1,11 +1,11 @@
-﻿using MyBlocks;
-using MyMap;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MyUtils;
-using MyBlocks;
+using MyClass.MyUtils;
+using MyClass.MyBlocks;
+using MyClass.MyBlocks.Blocks;
+using MyClass.MyBlocks.BlocksInterfaces;
 using MyCreature;
-namespace MyHandelers
+namespace MyClass.MyMap
 {
     internal class MapHandeler
     {

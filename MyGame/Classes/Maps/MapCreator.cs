@@ -1,8 +1,9 @@
-﻿using MyUtils;
-using MyBlocks;
+﻿using MyClass.MyUtils;
 using System.Collections.Generic;
 using MyCreature;
-namespace MyMap
+using MyClass.MyBlocks;
+using MyClass.MyBlocks.Blocks;
+namespace MyClass.MyMap
 {
     public struct Grid
     {

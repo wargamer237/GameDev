@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using MyUtils;
+using MyClass.MyUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyUtils
+namespace MyClass.MyInterface
 {
     internal interface HasAnimations <animation>
     {

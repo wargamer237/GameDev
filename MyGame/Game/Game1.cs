@@ -1,19 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
-using MyUtils;
+using MyClass.MyUtils;
 using System.IO;
 namespace MyGame
 {
     public class Game1 : Game
     {
         private Main m_Main;
-
         GraphicsDeviceManager m_Intelize;
         SpriteBatch m_Graph;
-
+        SoundEffect m_SoundEffect;
+        public static bool CloseGame;
         public Game1()
         {
+            CloseGame = false;
             m_Intelize = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -41,7 +43,7 @@ namespace MyGame
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || CloseGame || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             base.Update(gameTime);
             //My Update

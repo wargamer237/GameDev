@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using MyUtils;
-using MyMap;
+using MyClass.MyUtils;
+using MyClass.MyMap;
 using System;
 using Microsoft.Xna.Framework.Input;
+using MyGame;
 namespace MyMenu
 {
     internal class MainMenu
@@ -12,7 +13,9 @@ namespace MyMenu
         List<RectangleF> m_MapButtons;
         List<Color> m_Colors;
         string[] m_ButtonNames;
+
         RectangleF m_Exit;
+        Color m_ColorExit;
         bool m_MenuVisible;
         int m_SelectedMap;
         public MainMenu(RectangleF screen)
@@ -20,6 +23,8 @@ namespace MyMenu
             m_MenuVisible = true;
             m_Screen = screen;
             CreateButtons(Enum.GetValues(typeof(MapTypes)).Length, Enum.GetNames(typeof(MapTypes)));
+            m_Exit = new RectangleF(screen.Width- 120,40, 80,80);
+            m_ColorExit = Color.DarkRed;
         }
         private void CreateButtons(int amount,string[] names)
         {
@@ -68,6 +73,18 @@ namespace MyMenu
             }
             return -1;
         }
+        private bool MousePressedButton(RectangleF rect)
+        {
+            MouseState mouseState = Mouse.GetState();
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (Colision.PointInRect(new PointF(mouseState.Position.X, mouseState.Position.Y), rect))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void Draw()
         {
             if (!m_MenuVisible) return;
@@ -77,12 +94,17 @@ namespace MyMenu
                 i++;
 
                 UtilsStatic.NewPush();
-
                 UtilsStatic.PushTranslate(item.X - item.Width / 2, item.Y - item.Height / 2);
                 UtilsStatic.SetColor(m_Colors[i]);
                 UtilsStatic.DrawRect(new RectangleF(item.Width / 2, item.Height / 2, item.Width, item.Height));
                 UtilsStatic.PopMatrix();
             }
+            UtilsStatic.NewPush();
+            UtilsStatic.SetColor(m_ColorExit);
+            UtilsStatic.PushTranslate(m_Exit.X - m_Exit.Width / 2, m_Exit.Y - m_Exit.Height / 2);
+            UtilsStatic.DrawRect(new RectangleF(m_Exit.Width / 2, m_Exit.Height / 2, m_Exit.Width, m_Exit.Height));
+            UtilsStatic.PopMatrix();
+            UtilsStatic.ResetColor();
         }
         public int Update()
         {
@@ -100,8 +122,12 @@ namespace MyMenu
                         return (int)MapTypes.Level1;
                     default:
                         return -1;
-                        break;
                 }
+            }
+            bool prest = MousePressedButton(m_Exit);
+            if (prest)
+            {
+                Game1.CloseGame = true;
             }
             return -1;
         }

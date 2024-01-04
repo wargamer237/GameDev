@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using MyUtils;
-using System;
+using MyClass.MyUtils;
+using MyClass.MyInterface;
 using System.Collections.Generic;
 
 namespace MyCreature
@@ -44,6 +44,7 @@ namespace MyCreature
             m_Speed = 0;
             m_Resistents = 0;
             m_MaxSpeed = 0;
+            m_Health = 9999;
             m_Gravity = 100;
             //attack
             m_AttackStartDuration = 0.8f;
@@ -51,6 +52,7 @@ namespace MyCreature
             m_AttackStartTimer = new MyTimer(m_AttackStartDuration);
             m_AttackTimer = new MyTimer(m_AttackDuration);
             m_CooldownTimer = new MyTimer(3);
+            m_Cooldown = true;
             //animation
             IntelizeAnimations(10, 2);
         }

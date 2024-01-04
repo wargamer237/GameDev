@@ -1,8 +1,7 @@
-﻿using MyUtils;//HAS MY RectF :)
+﻿using MyClass.MyUtils;//HAS MY RectF :)
 using Microsoft.Xna.Framework; //HAS NO RectF :'(
-using MyBlocks;
 
-namespace MyBlocks
+namespace MyClass.MyBlocks
 {
     public enum BlockType
     {

@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using MyCreature;
-using MyUtils;
-using System;
+using MyClass.MyUtils;
 using System.Collections.Generic;
-
+using MyClass.MyInterface;
 
 
 namespace MyCreature

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyUtils
+namespace MyClass.MyUtils
 {
     internal class MyTimer
     {

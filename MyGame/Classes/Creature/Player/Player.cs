@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using MyUtils;
+using MyClass.MyUtils;
 using System.Collections.Generic;
 using System;
-
+using MyClass.MyInterface;
 namespace MyCreature
 {
     internal class Player : AttackCreature, HasAnimations<Player.CurantMovment>
@@ -45,11 +45,12 @@ namespace MyCreature
         {
             m_TexturePath = "Textures/Creatures/Player/Player.png";
             m_VerticxDebugRects = new List<RectangleF>();
-            m_Speed = 400;
+            m_Speed = 500;
             m_Resistents = m_Speed / 100 * 50;
             m_MaxSpeed = m_Speed * 1f;
-            m_Gravity = 500;
+            m_Gravity = 550;
             m_JumpingHeight = 22;
+            m_Health = 3;
             // down right test
             m_StartPosition = new PointF(200, -300);
             m_DrawRect.X = m_StartPosition.X;

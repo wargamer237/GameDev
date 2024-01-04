@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MyUtils
+namespace MyClass.MyUtils
 {
     internal class DrawClass
     {

@@ -1,6 +1,6 @@
-﻿using MyUtils;
+﻿using MyClass.MyUtils;
 using Microsoft.Xna.Framework;
-namespace MyBlocks
+namespace MyClass.MyBlocks.BlocksInterfaces
 {
     internal interface ICollidable
     {

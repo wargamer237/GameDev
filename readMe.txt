@@ -21,3 +21,50 @@ And change the set up of using player. Player is now a 'Creature' and he is in t
 And fix weard isues with colision.RectInRect(r1,r2);
 9) added all of the enemys
 10) 02/01 working prototype. No screen between transistions screens.
+
+----------------------------------------------------------------------
+WHAT I NEEDED TO DO
+----------------------------------------------------------------------
+SOLO GAME DEV PROJECT
+```
+VEREIST: ( alles moet tenminstens er in zitten)
+github link invite 	: done
+Start scherm 		: done
+Animatie/spites		: done
+2 levels uit start cherm: done
+    - moelijks graad	: not realy got same map with harder set up.
+3 verschilende vijanden  : done
+key inputs		 : done //also mouse input for menu
+death screen		 : done // Player has animations then jump back to menu 
+Basic physics		 : REALY DONE // UHM BASIC.. xd
+    - collisions
+    - Acceleratie en momentum van held
+Basic AI: 		 : done
+    - elke enemy ander AI
+Sprites and TileSet + Background : done
+    - niet gekleurde blokjes	 
+Minstens 2 Design Patterns  	 :I think I got it
+Toepassen van SOLID		 :I think I got it
+    - Extra folder om klassen in te plaatsen
+    - Minstens 3 bewijzen van SOLID gebruik
+Minstens 2 uitgezerte exra's	 :moving platform
+		I GOT: Moving platforms, Camara movment "with matrix"
+    - powerups
+    - fog of war
+    - bos hp bar
+    - levens visuwaliseren
+    - helper
+    - bounce efects
+double code verminderen		:done //could be better but i did oke here (creatures base.function), MyUtils files
+look and feel			: Got hard and easter level but SAME MAP and a test map.
+    - uitwerking van minimale vereisten
+    - uiterken van meer levels
+geluid/muziek/efects 		: done // go 1 sound and that when you win To show that i can do it but (the momogame file prolem)
+Verder OOD			: done // ye Creatures, Blocks
+----------------------------------------------
+INLEVEREN:
+YT VIDEO MAX 10min NO VID NO POINTS
+github link
+code zipen
+Stukje document waar je SOLID hebt gebruikt
+```

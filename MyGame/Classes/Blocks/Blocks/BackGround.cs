@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using MyUtils;
+using MyClass.MyUtils;
 using System;
 
-namespace MyBlocks
+namespace MyClass.MyBlocks.Blocks
 {
     internal class BackGround : Block
     {
